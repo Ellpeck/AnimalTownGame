@@ -51,8 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main\GameImpl.cs" />
+    <Compile Include="Main\Registry.cs" />
     <Compile Include="Main\Startup.cs" />
+    <Compile Include="Maps\Map.cs" />
+    <Compile Include="Maps\Objects\MapObject.cs" />
+    <Compile Include="Maps\Tile.cs" />
+    <Compile Include="Maps\TileType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\Camera.cs" />
+    <Compile Include="Rendering\MapRenderer.cs" />
+    <Compile Include="Rendering\TextureAtlas.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
