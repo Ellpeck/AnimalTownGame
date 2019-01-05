@@ -29,20 +29,18 @@ namespace AnimalTownGame.Main {
             };
             this.Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
+            this.SuppressDraw();
         }
 
         protected override void LoadContent() {
             new Registry();
             this.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
 
+            var rand = new Random();
             var town = this.AddMap(new Map("Town", 64, 64));
             for (var x = 0; x < 64; x++)
                 for (var y = 0; y < 64; y++)
-                    if (x % 3 == 0 && y % 2 == 0)
-                        town.SetTile(x, y, Registry.TilePath);
-                    else
-                        town.SetTile(x, y, Registry.TileGrass);
-            town.SetTile(10, 10, Registry.TileWater);
+                    town.SetTile(new Point(x, y), rand.NextDouble() >= 0.25F ? Registry.TileWater : Registry.TileGrass);
 
             this.Player = new Player(town, new Vector2(10.5F, 10.5F));
             town.DynamicObjects.Add(this.Player);
@@ -62,6 +60,7 @@ namespace AnimalTownGame.Main {
         }
 
         protected override void Draw(GameTime gameTime) {
+            this.GraphicsDevice.Clear(Color.Aqua);
             MapRenderer.RenderMap(this.SpriteBatch, this.CurrentMap, this.GraphicsDevice.Viewport, this.camera);
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AnimalTownGame.Maps.Objects;
+using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
 
 namespace AnimalTownGame.Maps {
@@ -13,7 +14,15 @@ namespace AnimalTownGame.Maps {
 
         public readonly List<DynamicObject> DynamicObjects = new List<DynamicObject>();
 
-        public Tile this[int x, int y] => this.tileGrid[x, y];
+        public Tile this[Point point] => this[point.X, point.Y];
+
+        public Tile this[int x, int y] {
+            get {
+                if (x < 0 || y < 0 || x >= this.WidthInTiles || y >= this.HeightInTiles)
+                    return null;
+                return this.tileGrid[x, y];
+            }
+        }
 
         public Map(string name, int widthInTiles, int heightInTiles) {
             this.Name = name;
@@ -27,8 +36,14 @@ namespace AnimalTownGame.Maps {
                 obj.Update(passed);
         }
 
-        public void SetTile(int x, int y, TileType type) {
-            this.tileGrid[x, y] = type.Instance(this, new Point(x, y));
+        public void SetTile(Point point, TileType type) {
+            this.tileGrid[point.X, point.Y] = type.Instance(this, point);
+
+            foreach (var dir in Direction.Values) {
+                var tile = this[point + dir.Offset];
+                if (tile != null)
+                    tile.OnNeighborChanged(point);
+            }
         }
 
     }

@@ -19,18 +19,12 @@ namespace AnimalTownGame.Rendering {
                 Math.Min(map.HeightInTiles, Util.Ceil(bottomRight.Y - fY)));
 
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
-            var atlas = Registry.TextureOutside;
+
             for (var x = frustum.X; x < frustum.Right; x++) {
                 for (var y = frustum.Y; y < frustum.Bottom; y++) {
                     var tile = map[x, y];
-                    if (tile == null)
-                        continue;
-                    var texCoord = tile.type.TextureCoord;
-                    batch.Draw(
-                        atlas.Texture,
-                        new Rectangle(tile.Position.X, tile.Position.Y, 1, 1),
-                        atlas.GetRegion(texCoord.X, texCoord.Y),
-                        Color.White);
+                    if (tile != null)
+                        tile.Draw(batch);
                 }
             }
             batch.End();

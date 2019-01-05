@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AnimalTownGame.Main;
+using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -47,21 +48,7 @@ namespace AnimalTownGame.Maps.Objects {
         }
 
         protected void UpdateAnimation() {
-            string toPlay;
-            switch (this.Direction) {
-                case 0:
-                    toPlay = "Up";
-                    break;
-                case 1:
-                    toPlay = "Right";
-                    break;
-                case 2:
-                    toPlay = "Down";
-                    break;
-                default:
-                    toPlay = "Left";
-                    break;
-            }
+            var toPlay = this.Direction.Name;
             if (!(this is Player) || Math.Abs(this.Velocity.X) < 0.01 && Math.Abs(this.Velocity.Y) < 0.01) {
                 var diff = this.Position - this.LastPosition;
                 if (Math.Abs(diff.X) < 0.01 && Math.Abs(diff.Y) < 0.01)

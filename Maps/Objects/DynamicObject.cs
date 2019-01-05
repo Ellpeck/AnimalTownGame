@@ -1,4 +1,5 @@
 using System;
+using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
@@ -7,7 +8,7 @@ namespace AnimalTownGame.Maps.Objects {
 
         public Vector2 LastPosition;
         public Vector2 Velocity;
-        public int Direction = 2;
+        public Direction Direction = Direction.Down;
         public bool NoClip;
 
         public DynamicObject(Map map, Vector2 position, Size2 size) : base(map, position, size) {
@@ -23,7 +24,7 @@ namespace AnimalTownGame.Maps.Objects {
                     this.Position = newX;
                 }
                 if (Math.Abs(this.Velocity.X) >= 0.02) {
-                    this.Direction = this.Velocity.X > 0 ? 1 : 3;
+                    this.Direction = this.Velocity.X > 0 ? Direction.Right : Direction.Left;
                 }
             }
             if (this.Velocity.Y != 0) {
@@ -32,7 +33,7 @@ namespace AnimalTownGame.Maps.Objects {
                     this.Position = newY;
                 }
                 if (Math.Abs(this.Velocity.Y) >= 0.02) {
-                    this.Direction = this.Velocity.Y > 0 ? 2 : 0;
+                    this.Direction = this.Velocity.Y > 0 ? Direction.Down : Direction.Up;
                 }
             }
             this.Velocity *= 0.5F;
