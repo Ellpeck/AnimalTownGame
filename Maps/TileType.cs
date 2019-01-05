@@ -9,8 +9,8 @@ namespace AnimalTownGame.Maps {
             this.TextureCoord = textureCoord;
         }
 
-        public Tile Instance(Point position) {
-            return new Tile(this, position);
+        public Tile Instance(Map map, Point position) {
+            return new Tile(this, map, position);
         }
 
     }

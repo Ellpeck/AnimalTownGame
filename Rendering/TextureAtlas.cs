@@ -12,7 +12,7 @@ namespace AnimalTownGame.Rendering {
         public TextureAtlas(string location, int regionWidth, int regionHeight) {
             this.RegionWidth = regionWidth;
             this.RegionHeight = regionHeight;
-            this.Texture = GameImpl.Instance.Content.Load<Texture2D>(location);
+            this.Texture = GameImpl.LoadContent<Texture2D>(location);
         }
 
         public Rectangle GetRegion(int regionX, int regionY) {

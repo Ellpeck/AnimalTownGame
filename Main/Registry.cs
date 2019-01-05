@@ -9,6 +9,7 @@ namespace AnimalTownGame.Main {
 
         public static readonly TileType TileGrass = new TileType(new Point(4, 1));
         public static readonly TileType TilePath = new TileType(new Point(2, 0));
+        public static readonly TileType TileWater = new TileType(new Point(1, 8));
 
     }
 }

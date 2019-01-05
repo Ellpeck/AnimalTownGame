@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using AnimalTownGame.Maps;
+using AnimalTownGame.Maps.Objects;
 using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 namespace AnimalTownGame.Main {
     public class GameImpl : Game {
@@ -14,7 +17,8 @@ namespace AnimalTownGame.Main {
         private Camera camera;
 
         private Dictionary<string, Map> maps = new Dictionary<string, Map>();
-        public Map CurrentMap { get; private set; }
+        public Player Player { get; private set; }
+        public Map CurrentMap => this.Player.Map;
 
         public GameImpl() {
             Instance = this;
@@ -31,21 +35,29 @@ namespace AnimalTownGame.Main {
             new Registry();
             this.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
 
-            this.CurrentMap = this.AddMap(new Map("Town", 64, 64));
+            var town = this.AddMap(new Map("Town", 64, 64));
             for (var x = 0; x < 64; x++)
                 for (var y = 0; y < 64; y++)
                     if (x % 3 == 0 && y % 2 == 0)
-                        this.CurrentMap[x, y] = Registry.TilePath.Instance(new Point(x, y));
+                        town.SetTile(x, y, Registry.TilePath);
                     else
-                        this.CurrentMap[x, y] = Registry.TileGrass.Instance(new Point(x, y));
+                        town.SetTile(x, y, Registry.TileGrass);
+            town.SetTile(10, 10, Registry.TileWater);
 
-            this.camera = new Camera(null) {Scale = 80F};
+            this.Player = new Player(town, new Vector2(10.5F, 10.5F));
+            town.DynamicObjects.Add(this.Player);
+
+            this.camera = new Camera(this.Player) {Scale = 80F};
             this.camera.FixPosition(this.CurrentMap);
-            this.camera.PanToPosition = new Vector2(20, 20);
-            this.camera.PanSpeed = 0.01F;
         }
 
         protected override void Update(GameTime gameTime) {
+            InputManager.Update();
+
+            var passed = TimeSpan.FromSeconds(gameTime.GetElapsedSeconds());
+            foreach (var map in this.maps.Values)
+                map.Update(passed);
+
             this.camera.Update(this.CurrentMap);
         }
 
@@ -56,6 +68,10 @@ namespace AnimalTownGame.Main {
         private Map AddMap(Map map) {
             this.maps[map.Name] = map;
             return map;
+        }
+
+        public static T LoadContent<T>(string name) {
+            return Instance.Content.Load<T>(name);
         }
 
     }
