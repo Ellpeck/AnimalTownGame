@@ -38,17 +38,7 @@ namespace AnimalTownGame.Main {
             new Registry();
             this.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
 
-            var rand = new Random();
-            var town = this.AddMap(new Map("Town", 64, 64));
-            for (var x = 0; x < 64; x++)
-                for (var y = 0; y < 64; y++)
-                    town.SetTile(new Point(x, y), rand.NextDouble() >= 0.25F ? Registry.TileWater : Registry.TileGrass);
-            town.SetTile(new Point(15, 15), Registry.TilePath);
-            town.SetTile(new Point(10, 10), Registry.TilePath);
-
-            var tree = new Tree(town, new Vector2(15.5F, 15.5F));
-            town.StaticObjects.Add(tree);
-
+            var town = this.AddMap(MapGenerator.GenerateTown());
             this.Player = new Player(town, new Vector2(10.5F, 10.5F));
             town.DynamicObjects.Add(this.Player);
 

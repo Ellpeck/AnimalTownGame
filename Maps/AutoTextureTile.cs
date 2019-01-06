@@ -11,7 +11,7 @@ namespace AnimalTownGame.Maps {
 
         public AutoTextureTile(AutoTextureType type, Map map, Point position) : base(type, map, position) {
             this.type = type;
-            this.currentTexCoord = type.TextureCoord + new Point(3, 1);
+            this.OnNeighborChanged(Point.Zero);
         }
 
         public override void OnNeighborChanged(Point neighbor) {
