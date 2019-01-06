@@ -13,7 +13,7 @@ namespace AnimalTownGame.Maps {
             // Initial grass
             for (var x = 0; x < map.WidthInTiles; x++)
                 for (var y = 0; y < map.HeightInTiles; y++)
-                    map.SetTile(new Point(x, y), Registry.TileGrass);
+                    map.SetTile(new Point(x, y), rand.NextDouble() >= 0.6 ? Registry.TileDarkGrass : Registry.TileGrass);
 
             return map;
         }
