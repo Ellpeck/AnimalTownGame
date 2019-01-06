@@ -7,16 +7,15 @@ namespace AnimalTownGame.Maps.Objects {
     public class MapObject {
 
         public readonly Map Map;
-        public readonly Size2 Size;
+        public RectangleF RenderBounds;
         public Vector2 Position;
 
-        public MapObject(Map map, Vector2 position, Size2 size) {
+        public MapObject(Map map, Vector2 position) {
             this.Map = map;
             this.Position = position;
-            this.Size = size;
         }
 
-        public virtual void Update(TimeSpan passed) {
+        public virtual void UpdateRealTime(DateTime now, DateTime lastUpdate, TimeSpan passed) {
         }
 
         public virtual void Draw(SpriteBatch batch) {

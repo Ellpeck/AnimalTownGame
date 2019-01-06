@@ -8,7 +8,7 @@ namespace AnimalTownGame.Maps.Objects {
         public Player(Map map, Vector2 position) : base("Player", map, position) {
         }
 
-        public override void Update(TimeSpan passed) {
+        public override void Update(GameTime gameTime) {
             var speed = InputManager.GetKeyType("Slow") > 0 ? 0.02F : 0.03F;
             var vel = new Vector2();
 
@@ -31,7 +31,7 @@ namespace AnimalTownGame.Maps.Objects {
             }
             this.Velocity += vel;
 
-            base.Update(passed);
+            base.Update(gameTime);
         }
 
     }

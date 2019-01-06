@@ -11,12 +11,10 @@ namespace AnimalTownGame.Maps.Objects {
         public Direction Direction = Direction.Down;
         public bool NoClip;
 
-        public DynamicObject(Map map, Vector2 position, Size2 size) : base(map, position, size) {
+        public DynamicObject(Map map, Vector2 position) : base(map, position) {
         }
 
-        public override void Update(TimeSpan passed) {
-            base.Update(passed);
-
+        public virtual void Update(GameTime gameTime) {
             this.LastPosition = this.Position;
             if (this.Velocity.X != 0) {
                 var newX = new Vector2(this.Position.X + this.Velocity.X, this.Position.Y);

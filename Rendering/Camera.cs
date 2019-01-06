@@ -49,9 +49,10 @@ namespace AnimalTownGame.Rendering {
             Vector2 desired;
             if (this.PanToPosition != null)
                 desired = this.PanToPosition.Value;
-            else if (this.FollowedObject != null)
-                desired = this.FollowedObject.Position - (Vector2) this.FollowedObject.Size / 2;
-            else
+            else if (this.FollowedObject != null) {
+                var bounds = this.FollowedObject.RenderBounds;
+                desired = this.FollowedObject.Position - (Vector2) bounds.Position - new Vector2(bounds.Width / 2, bounds.Height / 4 * 3);
+            } else
                 return this.Position;
             desired -= new Vector2(viewport.Width / 2F, viewport.Height / 2F) / this.Scale;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Maps.Objects;
+using AnimalTownGame.Maps.Objects.Static;
 using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +21,8 @@ namespace AnimalTownGame.Main {
         public Player Player { get; private set; }
         public Map CurrentMap => this.Player.Map;
 
+        private DateTime lastRealTimeUpdate = DateTime.Now;
+
         public GameImpl() {
             Instance = this;
 
@@ -29,7 +32,6 @@ namespace AnimalTownGame.Main {
             };
             this.Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
-            this.SuppressDraw();
         }
 
         protected override void LoadContent() {
@@ -41,6 +43,11 @@ namespace AnimalTownGame.Main {
             for (var x = 0; x < 64; x++)
                 for (var y = 0; y < 64; y++)
                     town.SetTile(new Point(x, y), rand.NextDouble() >= 0.25F ? Registry.TileWater : Registry.TileGrass);
+            town.SetTile(new Point(15, 15), Registry.TilePath);
+            town.SetTile(new Point(10, 10), Registry.TilePath);
+
+            var tree = new Tree(town, new Vector2(15.5F, 15.5F));
+            town.StaticObjects.Add(tree);
 
             this.Player = new Player(town, new Vector2(10.5F, 10.5F));
             town.DynamicObjects.Add(this.Player);
@@ -52,15 +59,21 @@ namespace AnimalTownGame.Main {
         protected override void Update(GameTime gameTime) {
             InputManager.Update();
 
-            var passed = TimeSpan.FromSeconds(gameTime.GetElapsedSeconds());
-            foreach (var map in this.maps.Values)
-                map.Update(passed);
+            this.CurrentMap.Update(gameTime);
+
+            var now = DateTime.Now;
+            var passed = now.Subtract(this.lastRealTimeUpdate);
+            if (passed.Minutes >= 10) {
+                foreach (var map in this.maps.Values)
+                    map.UpdateRealTime(now, this.lastRealTimeUpdate, passed);
+                this.lastRealTimeUpdate = now;
+            }
 
             this.camera.Update(this.CurrentMap);
         }
 
         protected override void Draw(GameTime gameTime) {
-            this.GraphicsDevice.Clear(Color.Aqua);
+            this.GraphicsDevice.Clear(Color.Azure);
             MapRenderer.RenderMap(this.SpriteBatch, this.CurrentMap, this.GraphicsDevice.Viewport, this.camera);
         }
 

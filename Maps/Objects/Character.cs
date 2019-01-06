@@ -15,7 +15,9 @@ namespace AnimalTownGame.Maps.Objects {
         protected readonly SpriteSheetAnimationFactory AnimationFactory;
         protected SpriteSheetAnimation CurrentAnimation;
 
-        public Character(string name, Map map, Vector2 position) : base(map, position, new Size2(0.75F, 0.95F)) {
+        public Character(string name, Map map, Vector2 position) : base(map, position) {
+            this.RenderBounds = new RectangleF(-0.5F, -1.5F, 1, 2);
+
             this.AnimationFactory = new SpriteSheetAnimationFactory(new TextureAtlas(
                 name,
                 GameImpl.LoadContent<Texture2D>("Characters/" + name),
@@ -31,20 +33,20 @@ namespace AnimalTownGame.Maps.Objects {
             this.CurrentAnimation = this.AnimationFactory.Create("StandingDown");
         }
 
-        public override void Update(TimeSpan passed) {
-            base.Update(passed);
+        public override void Update(GameTime gameTime) {
+            base.Update(gameTime);
 
             this.UpdateAnimation();
-            this.CurrentAnimation.Update((float) passed.TotalSeconds);
+            this.CurrentAnimation.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch batch) {
             var frame = this.CurrentAnimation.CurrentFrame;
             batch.Draw(frame,
-                this.Position - new Vector2(0.5F, 1.5F),
+                this.Position + this.RenderBounds.Position,
                 Color.White,
-                0F, Vector2.Zero, new Vector2(1F / frame.Width, 2F / frame.Height), SpriteEffects.None,
-                this.GetRenderDepth());
+                0F, Vector2.Zero, new Vector2(this.RenderBounds.Width / frame.Width, this.RenderBounds.Height / frame.Height),
+                SpriteEffects.None, this.GetRenderDepth());
         }
 
         protected void UpdateAnimation() {
