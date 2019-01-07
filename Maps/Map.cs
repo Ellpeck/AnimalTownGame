@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using AnimalTownGame.Maps.Objects;
-using AnimalTownGame.Maps.Objects.Static;
 using AnimalTownGame.Misc;
+using AnimalTownGame.Objects;
+using AnimalTownGame.Objects.Static;
 using Microsoft.Xna.Framework;
 
 namespace AnimalTownGame.Maps {
@@ -20,6 +20,9 @@ namespace AnimalTownGame.Maps {
 
         public Tile this[int x, int y] => this.IsInBounds(x, y) ? this.tileGrid[x, y] : null;
 
+        public readonly Random Random = new Random();
+        public int Ticks;
+
         public Map(string name, int widthInTiles, int heightInTiles) {
             this.Name = name;
             this.WidthInTiles = widthInTiles;
@@ -35,6 +38,8 @@ namespace AnimalTownGame.Maps {
         }
 
         public void Update(GameTime gameTime) {
+            this.Ticks++;
+
             foreach (var obj in this.DynamicObjects)
                 obj.Update(gameTime);
         }

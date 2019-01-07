@@ -1,9 +1,10 @@
 using System;
+using AnimalTownGame.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 
-namespace AnimalTownGame.Maps.Objects {
+namespace AnimalTownGame.Objects {
     public class MapObject {
 
         public readonly Map Map;

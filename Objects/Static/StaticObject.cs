@@ -1,8 +1,9 @@
 using AnimalTownGame.Main;
+using AnimalTownGame.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AnimalTownGame.Maps.Objects.Static {
+namespace AnimalTownGame.Objects.Static {
     public class StaticObject : MapObject {
 
         private readonly Texture2D texture;

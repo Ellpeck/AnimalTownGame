@@ -1,7 +1,6 @@
 using System;
 using AnimalTownGame.Main;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 
 namespace AnimalTownGame.Maps {
     public static class MapGenerator {

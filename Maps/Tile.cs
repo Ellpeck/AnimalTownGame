@@ -1,4 +1,5 @@
 using AnimalTownGame.Main;
+using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -33,9 +34,15 @@ namespace AnimalTownGame.Maps {
     public class TileType {
 
         public readonly Point TextureCoord;
+        public int PathCost = PathFinding.DefaultPathfindCost;
 
         public TileType(Point textureCoord) {
             this.TextureCoord = textureCoord;
+        }
+
+        public TileType SetCost(int cost) {
+            this.PathCost = cost;
+            return this;
         }
 
         public virtual Tile Instance(Map map, Point position) {

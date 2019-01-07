@@ -12,6 +12,7 @@ namespace AnimalTownGame.Misc {
         public static readonly Direction DownLeft = new Direction("DownLeft", -1, 1);
         public static readonly Direction DownRight = new Direction("DownRight", 1, 1);
         public static readonly Direction[] Values = {Up, Down, Left, Right, UpLeft, UpRight, DownLeft, DownRight};
+        public static readonly Direction[] Adjacents = {Up, Down, Left, Right};
 
         public readonly string Name;
         public readonly Point Offset;

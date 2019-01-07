@@ -1,8 +1,8 @@
 using System;
 using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
-using AnimalTownGame.Maps.Objects;
 using AnimalTownGame.Misc;
+using AnimalTownGame.Objects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -15,16 +15,16 @@ namespace AnimalTownGame.Rendering {
         public static void RenderMap(SpriteBatch batch, Map map, Viewport viewport, Camera camera) {
             var topLeft = camera.ToWorldPos(Vector2.Zero);
             var bottomRight = camera.ToWorldPos(new Vector2(viewport.Width, viewport.Height));
-            var fX = Math.Max(0, Util.Floor(topLeft.X + FrustumTest));
-            var fY = Math.Max(0, Util.Floor(topLeft.Y + FrustumTest));
-            var frustum = new Rectangle(fX, fY,
-                Math.Min(map.WidthInTiles, Util.Ceil(bottomRight.X - FrustumTest - fX)),
-                Math.Min(map.HeightInTiles, Util.Ceil(bottomRight.Y - FrustumTest - fY)));
+            var fX = Math.Max(0, (topLeft.X + FrustumTest).Floor());
+            var fY = Math.Max(0, (topLeft.Y + FrustumTest).Floor());
+            var frustum = new RectangleF(fX, fY,
+                Math.Min(map.WidthInTiles, (bottomRight.X - FrustumTest - fX).Ceil()),
+                Math.Min(map.HeightInTiles, (bottomRight.Y - FrustumTest - fY).Ceil()));
 
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
 
-            for (var x = frustum.X; x < frustum.Right; x++) {
-                for (var y = frustum.Y; y < frustum.Bottom; y++) {
+            for (var x = (int) frustum.X; x < frustum.Right; x++) {
+                for (var y = (int) frustum.Y; y < frustum.Bottom; y++) {
                     var tile = map[x, y];
                     if (tile != null)
                         tile.Draw(batch);
@@ -42,11 +42,11 @@ namespace AnimalTownGame.Rendering {
             batch.End();
         }
 
-        private static bool OnScreen(MapObject obj, Rectangle frustum) {
+        private static bool OnScreen(MapObject obj, RectangleF frustum) {
             if (obj.RenderBounds == Rectangle.Empty)
                 return false;
             var rect = new RectangleF(obj.Position + obj.RenderBounds.Position, obj.RenderBounds.Size);
-            return frustum.Intersects(rect.ToRectangle());
+            return frustum.Intersects(rect);
         }
 
     }

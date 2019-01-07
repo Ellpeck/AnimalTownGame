@@ -14,7 +14,7 @@ namespace AnimalTownGame.Maps {
 
         public AutoTextureTile(AutoTextureType type, Map map, Point position) : base(type, map, position) {
             this.type = type;
-            this.OnNeighborChanged(Point.Zero);
+            this.OnNeighborChanged(position);
         }
 
         public override void OnNeighborChanged(Point neighbor) {

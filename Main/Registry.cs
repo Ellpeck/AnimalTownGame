@@ -8,9 +8,9 @@ namespace AnimalTownGame.Main {
         public static readonly TextureAtlas TextureOutside = new TextureAtlas("Tilesets/Outside", 16, 16);
 
         public static readonly TileType TileGrass = new TileType(new Point(0, 0));
-        public static readonly TileType TilePath = new AutoTextureType(new Point(1, 0), false);
-        public static readonly TileType TileWater = new AutoTextureType(new Point(8, 3), true);
-        public static readonly TileType TileDarkGrass = new AutoTextureType(new Point(4, 0), true);
+        public static readonly TileType TilePath = new AutoTextureType(new Point(1, 0), false).SetCost(200);
+        public static readonly TileType TileWater = new AutoTextureType(new Point(8, 3), true).SetCost(int.MaxValue);
+        public static readonly TileType TileDarkGrass = new AutoTextureType(new Point(4, 0), true).SetCost(int.MaxValue);
 
     }
 }

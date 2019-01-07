@@ -1,6 +1,6 @@
 using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
-using AnimalTownGame.Maps.Objects;
+using AnimalTownGame.Objects;
 using Microsoft.Xna.Framework;
 
 namespace AnimalTownGame.Rendering {
@@ -51,7 +51,7 @@ namespace AnimalTownGame.Rendering {
                 desired = this.PanToPosition.Value;
             else if (this.FollowedObject != null) {
                 var bounds = this.FollowedObject.RenderBounds;
-                desired = this.FollowedObject.Position - (Vector2) bounds.Position - new Vector2(bounds.Width / 2, bounds.Height / 4 * 3);
+                desired = this.FollowedObject.Position + bounds.Position + new Vector2(bounds.Width / 2, bounds.Height / 3);
             } else
                 return this.Position;
             desired -= new Vector2(viewport.Width / 2F, viewport.Height / 2F) / this.Scale;

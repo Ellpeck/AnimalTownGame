@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using AnimalTownGame.Maps;
-using AnimalTownGame.Maps.Objects;
-using AnimalTownGame.Maps.Objects.Static;
+using AnimalTownGame.Objects;
+using AnimalTownGame.Objects.Characters;
+using AnimalTownGame.Objects.Static;
 using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -39,8 +40,11 @@ namespace AnimalTownGame.Main {
             this.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
 
             var town = this.AddMap(MapGenerator.GenerateTown());
-            this.Player = new Player(town, new Vector2(10.5F, 10.5F));
+            this.Player = new Player(town, new Vector2(32.5F, 32.5F));
             town.DynamicObjects.Add(this.Player);
+
+            var villager = new Villager("Player", town, new Vector2(35.5F, 32.5F));
+            town.DynamicObjects.Add(villager);
 
             this.camera = new Camera(this.Player) {Scale = 80F};
             this.camera.FixPosition(this.CurrentMap);
@@ -63,7 +67,7 @@ namespace AnimalTownGame.Main {
         }
 
         protected override void Draw(GameTime gameTime) {
-            this.GraphicsDevice.Clear(Color.Azure);
+            this.GraphicsDevice.Clear(Color.Aqua);
             MapRenderer.RenderMap(this.SpriteBatch, this.CurrentMap, this.GraphicsDevice.Viewport, this.camera);
         }
 

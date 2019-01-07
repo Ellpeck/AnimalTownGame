@@ -1,15 +1,17 @@
-using System;
 using AnimalTownGame.Main;
+using AnimalTownGame.Maps;
+using AnimalTownGame.Objects.Characters;
 using Microsoft.Xna.Framework;
 
-namespace AnimalTownGame.Maps.Objects {
+namespace AnimalTownGame.Objects {
     public class Player : Character {
 
         public Player(Map map, Vector2 position) : base("Player", map, position) {
+            this.WalkSpeed = 0.03F;
         }
 
         public override void Update(GameTime gameTime) {
-            var speed = InputManager.GetKeyType("Slow") > 0 ? 0.02F : 0.03F;
+            var speed = InputManager.GetKeyType("Slow") > 0 ? this.WalkSpeed * 0.5F : this.WalkSpeed;
             var vel = new Vector2();
 
             if (InputManager.GetKeyType("Up") > 0) {
@@ -32,6 +34,10 @@ namespace AnimalTownGame.Maps.Objects {
             this.Velocity += vel;
 
             base.Update(gameTime);
+        }
+
+        public override bool ShouldTurn() {
+            return InputManager.GetKeyType("Slow") == PressType.Nothing;
         }
 
     }

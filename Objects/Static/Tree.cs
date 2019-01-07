@@ -1,7 +1,8 @@
+using AnimalTownGame.Maps;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
-namespace AnimalTownGame.Maps.Objects.Static {
+namespace AnimalTownGame.Objects.Static {
     public class Tree : StaticObject {
 
         public Tree(Map map, Vector2 position) : base("Tree", map, position) {
