@@ -1,5 +1,4 @@
 using System;
-using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Misc;
 using AnimalTownGame.Objects;
@@ -10,7 +9,9 @@ using MonoGame.Extended;
 namespace AnimalTownGame.Rendering {
     public static class MapRenderer {
 
-        private const int FrustumTest = 0;
+        public static int FrustumTest;
+        public static bool DisplayCollisions;
+        public static bool DisplayRenderBounds;
 
         public static void RenderMap(SpriteBatch batch, Map map, Viewport viewport, Camera camera) {
             var topLeft = camera.ToWorldPos(Vector2.Zero);
@@ -26,27 +27,46 @@ namespace AnimalTownGame.Rendering {
             for (var x = (int) frustum.X; x < frustum.Right; x++) {
                 for (var y = (int) frustum.Y; y < frustum.Bottom; y++) {
                     var tile = map[x, y];
-                    if (tile != null)
-                        tile.Draw(batch);
+                    if (tile == null)
+                        continue;
+                    tile.Draw(batch);
+
+                    if (DisplayCollisions) {
+                        var bounds = tile.GetCollisionBounds();
+                        if (bounds != Rectangle.Empty)
+                            batch.DrawRectangle(bounds.Location.ToVector2(), bounds.Size, Color.Red, 1F / camera.Scale);
+                    }
                 }
             }
             batch.End();
 
             batch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
             foreach (var obj in map.DynamicObjects)
-                if (OnScreen(obj, frustum))
-                    obj.Draw(batch);
+                DrawObj(batch, obj, camera, frustum);
             foreach (var obj in map.StaticObjects)
-                if (OnScreen(obj, frustum))
-                    obj.Draw(batch);
+                DrawObj(batch, obj, camera, frustum);
             batch.End();
         }
 
-        private static bool OnScreen(MapObject obj, RectangleF frustum) {
+        private static void DrawObj(SpriteBatch batch, MapObject obj, Camera camera, RectangleF frustum) {
             if (obj.RenderBounds == Rectangle.Empty)
-                return false;
+                return;
             var rect = new RectangleF(obj.Position + obj.RenderBounds.Position, obj.RenderBounds.Size);
-            return frustum.Intersects(rect);
+            if (!frustum.Intersects(rect))
+                return;
+
+            obj.Draw(batch);
+
+            if (DisplayCollisions) {
+                var bounds = obj.CollisionBounds;
+                bounds.Offset(obj.Position);
+                batch.DrawRectangle(bounds.Position, bounds.Size, Color.Blue, 1F / camera.Scale);
+            }
+            if (DisplayRenderBounds) {
+                var bounds = obj.RenderBounds;
+                bounds.Offset(obj.Position);
+                batch.DrawRectangle(bounds.Position, bounds.Size, Color.Purple, 1F / camera.Scale);
+            }
         }
 
     }

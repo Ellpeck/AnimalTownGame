@@ -19,7 +19,7 @@ namespace AnimalTownGame.Objects.Characters {
 
         public Character(string name, Map map, Vector2 position) : base(map, position) {
             this.RenderBounds = new RectangleF(-0.5F, -1.5F, 1, 2);
-            this.CollisionBounds = new RectangleF(-0.4F, 0.65F, 0.8F, 0.35F);
+            this.CollisionBounds = new RectangleF(-0.4F, 0, 0.8F, 0.35F);
 
             this.AnimationFactory = new SpriteSheetAnimationFactory(new TextureAtlas(
                 name,

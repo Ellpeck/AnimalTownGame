@@ -29,19 +29,24 @@ namespace AnimalTownGame.Maps {
                 Color.White);
         }
 
+        public Rectangle GetCollisionBounds() {
+            return this.Type.Walkability >= int.MaxValue ?
+                new Rectangle(this.Position, new Point(1, 1)) : Rectangle.Empty;
+        }
+
     }
 
     public class TileType {
 
         public readonly Point TextureCoord;
-        public int PathCost = PathFinding.DefaultPathfindCost;
+        public int Walkability = PathFinding.DefaultPathfindCost;
 
         public TileType(Point textureCoord) {
             this.TextureCoord = textureCoord;
         }
 
-        public TileType SetCost(int cost) {
-            this.PathCost = cost;
+        public TileType SetWalkability(int cost) {
+            this.Walkability = cost;
             return this;
         }
 

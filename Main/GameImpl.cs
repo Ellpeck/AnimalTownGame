@@ -51,6 +51,11 @@ namespace AnimalTownGame.Main {
 
             this.camera = new Camera(this.Player) {Scale = 80F};
             this.camera.FixPosition(this.CurrentMap);
+
+            for (int x = 0; x < 10; x++)
+                for (int y = 0; y < 10; y++)
+                    if (x % 2 == 0)
+                        town.SetTile(new Point(40 + x, 40 + y), Registry.TileWater);
         }
 
         protected override void Update(GameTime gameTime) {

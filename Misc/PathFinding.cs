@@ -69,10 +69,10 @@ namespace AnimalTownGame.Misc {
         private static int GetCost(Map map, Point point, DynamicObject obj) {
             if (!map.IsInBounds(point.X, point.Y))
                 return int.MaxValue;
+            if (obj.IsCollidingPos(point.ToVector2()))
+                return int.MaxValue;
             var tile = map[point];
-            if (tile != null)
-                return tile.Type.PathCost;
-            return DefaultPathfindCost;
+            return tile != null ? tile.Type.Walkability : DefaultPathfindCost;
         }
 
     }

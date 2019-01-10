@@ -30,24 +30,32 @@ namespace AnimalTownGame.Objects {
         }
 
         public bool IsCollidingPos(Vector2 pos) {
-            if (pos.X < 0 || pos.Y < 0)
-                return true;
-            if (pos.X > this.Map.WidthInTiles || pos.Y > this.Map.HeightInTiles)
+            if (!this.Map.IsInBounds(pos.X.Floor(), pos.Y.Floor()))
                 return true;
 
+            var myBounds = this.CollisionBounds;
+            myBounds.Offset(pos);
+            for (var x = 0; x <= myBounds.Width.Ceil(); x++)
+                for (var y = 0; y <= myBounds.Height.Ceil(); y++) {
+                    var tile = this.Map[myBounds.X.Floor() + x, myBounds.Y.Floor() + y];
+                    if (tile == null)
+                        return true;
+                    var bounds = tile.GetCollisionBounds();
+                    if (bounds != Rectangle.Empty && myBounds.Intersects(bounds))
+                        return true;
+                }
+
             foreach (var obj in this.Map.DynamicObjects)
-                if (obj != this && this.Collides(pos, obj))
+                if (obj != this && Collides(myBounds, obj))
                     return true;
             foreach (var obj in this.Map.StaticObjects)
-                if (this.Collides(pos, obj))
+                if (Collides(myBounds, obj))
                     return true;
 
             return false;
         }
 
-        private bool Collides(Vector2 pos, MapObject otherObject) {
-            var myBounds = this.CollisionBounds;
-            myBounds.Offset(pos);
+        private static bool Collides(RectangleF myBounds, MapObject otherObject) {
             var otherBounds = otherObject.CollisionBounds;
             otherBounds.Offset(otherObject.Position);
             return myBounds.Intersects(otherBounds);

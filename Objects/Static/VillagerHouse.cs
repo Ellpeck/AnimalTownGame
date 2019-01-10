@@ -11,9 +11,8 @@ namespace AnimalTownGame.Objects.Static {
 
         public VillagerHouse(string texture, Map map, Vector2 position) : base("Houses/" + texture, map, position) {
             this.RenderBounds = new RectangleF(0, -5, 5, 6);
-            this.CollisionBounds = new RectangleF(0.2F, -0.5F, 4.6F, 2);
+            this.CollisionBounds = new RectangleF(0.2F, -1, 4.6F, 2);
         }
-
 
     }
 }
