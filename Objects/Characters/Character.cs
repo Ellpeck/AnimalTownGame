@@ -19,6 +19,7 @@ namespace AnimalTownGame.Objects.Characters {
 
         public Character(string name, Map map, Vector2 position) : base(map, position) {
             this.RenderBounds = new RectangleF(-0.5F, -1.5F, 1, 2);
+            this.CollisionBounds = new RectangleF(-0.4F, 0.65F, 0.8F, 0.35F);
 
             this.AnimationFactory = new SpriteSheetAnimationFactory(new TextureAtlas(
                 name,
@@ -35,7 +36,7 @@ namespace AnimalTownGame.Objects.Characters {
             this.CurrentAnimation = this.AnimationFactory.Create("StandingDown");
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime, bool isCurrent) {
             if (this.ShouldTurn()) {
                 var limit = this.WalkSpeed / 2;
                 if (Math.Abs(this.Velocity.X) >= limit)
@@ -43,10 +44,12 @@ namespace AnimalTownGame.Objects.Characters {
                 if (Math.Abs(this.Velocity.Y) >= limit)
                     this.Direction = this.Velocity.Y > 0 ? Direction.Down : Direction.Up;
             }
-            base.Update(gameTime);
+            base.Update(gameTime, isCurrent);
 
-            this.UpdateAnimation();
-            this.CurrentAnimation.Update(gameTime);
+            if (isCurrent) {
+                this.UpdateAnimation();
+                this.CurrentAnimation.Update(gameTime);
+            }
         }
 
         public virtual bool ShouldTurn() {

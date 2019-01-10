@@ -10,7 +10,7 @@ namespace AnimalTownGame.Objects {
             this.WalkSpeed = 0.03F;
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime, bool isCurrent) {
             var speed = InputManager.GetKeyType("Slow") > 0 ? this.WalkSpeed * 0.5F : this.WalkSpeed;
             var vel = new Vector2();
 
@@ -33,7 +33,7 @@ namespace AnimalTownGame.Objects {
             }
             this.Velocity += vel;
 
-            base.Update(gameTime);
+            base.Update(gameTime, isCurrent);
         }
 
         public override bool ShouldTurn() {

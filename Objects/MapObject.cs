@@ -9,6 +9,7 @@ namespace AnimalTownGame.Objects {
 
         public readonly Map Map;
         public RectangleF RenderBounds;
+        public RectangleF CollisionBounds;
         public Vector2 Position;
 
         public MapObject(Map map, Vector2 position) {

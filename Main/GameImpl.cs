@@ -46,6 +46,9 @@ namespace AnimalTownGame.Main {
             var villager = new Villager("Player", town, new Vector2(35.5F, 32.5F));
             town.DynamicObjects.Add(villager);
 
+            var house = new VillagerHouse(VillagerHouse.Textures[0], town, new Vector2(20, 20));
+            town.StaticObjects.Add(house);
+
             this.camera = new Camera(this.Player) {Scale = 80F};
             this.camera.FixPosition(this.CurrentMap);
         }
@@ -53,7 +56,8 @@ namespace AnimalTownGame.Main {
         protected override void Update(GameTime gameTime) {
             InputManager.Update();
 
-            this.CurrentMap.Update(gameTime);
+            foreach (var map in this.maps.Values)
+                map.Update(gameTime, map == this.CurrentMap);
 
             var now = DateTime.Now;
             var passed = now.Subtract(this.lastRealTimeUpdate);

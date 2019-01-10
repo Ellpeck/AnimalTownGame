@@ -70,6 +70,7 @@
     <Compile Include="Objects\DynamicObject.cs" />
     <Compile Include="Objects\MapObject.cs" />
     <Compile Include="Objects\Player.cs" />
+    <Compile Include="Objects\Static\VillagerHouse.cs" />
     <Compile Include="Objects\Static\StaticObject.cs" />
     <Compile Include="Objects\Static\Tree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +85,14 @@
     <Content Include="Content\Characters\Animation.xml" />
     <Content Include="Content\Characters\Player.png" />
     <Content Include="Content\Content.mgcb" />
+    <Content Include="Content\Objects\Furniture\MarbleCounter.png" />
+    <Content Include="Content\Objects\Furniture\MarbleCounterSink.png" />
+    <Content Include="Content\Objects\Furniture\RedRug.png" />
+    <Content Include="Content\Objects\Furniture\Stove.png" />
+    <Content Include="Content\Objects\Furniture\WhiteLamp.png" />
+    <Content Include="Content\Objects\Furniture\WoodDiningTable.png" />
+    <Content Include="Content\Objects\Houses\RedBrick.png" />
+    <Content Include="Content\Objects\Houses\WhiteWood.png" />
     <Content Include="Content\Objects\Tree.png" />
     <Content Include="Content\Tilesets\Inside.png" />
     <Content Include="Content\Tilesets\Outside.png" />

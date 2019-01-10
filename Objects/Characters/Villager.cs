@@ -18,7 +18,7 @@ namespace AnimalTownGame.Objects.Characters {
             this.onPathEnded = callback;
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime, bool isCurrent) {
             if (this.path == null && this.Map.Ticks % 120 == 0 && this.Map.Random.NextDouble() <= 0.4) {
                 const int dist = 5;
                 var point = new Point(this.Map.Random.Next(-dist, dist), this.Map.Random.Next(-dist, dist));
@@ -46,7 +46,7 @@ namespace AnimalTownGame.Objects.Characters {
                 }
             }
 
-            base.Update(gameTime);
+            base.Update(gameTime, isCurrent);
         }
 
         public delegate void OnPathEnded();

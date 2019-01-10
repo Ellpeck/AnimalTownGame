@@ -21,7 +21,7 @@ namespace AnimalTownGame.Maps {
         public Tile this[int x, int y] => this.IsInBounds(x, y) ? this.tileGrid[x, y] : null;
 
         public readonly Random Random = new Random();
-        public int Ticks;
+        public int Ticks { get; private set; }
 
         public Map(string name, int widthInTiles, int heightInTiles) {
             this.Name = name;
@@ -37,11 +37,11 @@ namespace AnimalTownGame.Maps {
                 obj.UpdateRealTime(now, lastUpdate, passed);
         }
 
-        public void Update(GameTime gameTime) {
+        public void Update(GameTime gameTime, bool isCurrent) {
             this.Ticks++;
 
             foreach (var obj in this.DynamicObjects)
-                obj.Update(gameTime);
+                obj.Update(gameTime, isCurrent);
         }
 
         public void SetTile(Point point, TileType type) {
