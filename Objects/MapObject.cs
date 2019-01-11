@@ -7,9 +7,10 @@ using MonoGame.Extended;
 namespace AnimalTownGame.Objects {
     public class MapObject {
 
-        public readonly Map Map;
+        public Map Map;
         public RectangleF RenderBounds;
         public RectangleF CollisionBounds;
+        public RectangleF HighlightBounds;
         public Vector2 Position;
 
         public MapObject(Map map, Vector2 position) {
@@ -27,5 +28,7 @@ namespace AnimalTownGame.Objects {
             return Math.Max(0, this.Position.Y / this.Map.HeightInTiles / 1000F);
         }
 
+        public virtual void OnMouseOver(Vector2 mousePos) {
+        }
     }
 }

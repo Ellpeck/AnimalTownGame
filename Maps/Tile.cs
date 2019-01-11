@@ -1,5 +1,6 @@
 using AnimalTownGame.Main;
 using AnimalTownGame.Misc;
+using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,7 +21,7 @@ namespace AnimalTownGame.Maps {
         }
 
         public virtual void Draw(SpriteBatch batch) {
-            var atlas = Registry.TextureOutside;
+            var atlas =this.Type.Texture;
             var texCoord = this.Type.TextureCoord;
             batch.Draw(
                 atlas.Texture,
@@ -29,20 +30,21 @@ namespace AnimalTownGame.Maps {
                 Color.White);
         }
 
-        public Rectangle GetCollisionBounds() {
+        public virtual Rectangle GetCollisionBounds() {
             return this.Type.Walkability >= int.MaxValue ?
                 new Rectangle(this.Position, new Point(1, 1)) : Rectangle.Empty;
         }
-
     }
 
     public class TileType {
 
+        public readonly TextureAtlas Texture;
         public readonly Point TextureCoord;
         public int Walkability = PathFinding.DefaultPathfindCost;
 
-        public TileType(Point textureCoord) {
+        public TileType(Point textureCoord, TextureAtlas texture = null) {
             this.TextureCoord = textureCoord;
+            this.Texture = texture ?? Registry.TextureOutside;
         }
 
         public TileType SetWalkability(int cost) {

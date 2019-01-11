@@ -50,6 +50,15 @@ namespace AnimalTownGame.Objects.Characters {
                 this.UpdateAnimation();
                 this.CurrentAnimation.Update(gameTime);
             }
+
+            var myBounds = this.CollisionBounds;
+            myBounds.Offset(this.Position);
+            foreach (var obj in this.Map.StaticObjects) {
+                var bounds = obj.IntersectionBounds;
+                bounds.Offset(obj.Position);
+                if (myBounds.Intersects(bounds))
+                    obj.OnIntersectWith(this);
+            }
         }
 
         public virtual bool ShouldTurn() {
@@ -75,6 +84,34 @@ namespace AnimalTownGame.Objects.Characters {
             }
             if (this.CurrentAnimation.Name != toPlay)
                 this.CurrentAnimation = this.AnimationFactory.Create(toPlay);
+        }
+
+        public void StopMoving() {
+            this.Velocity = Vector2.Zero;
+        }
+
+        public void StopAndFace(DynamicObject obj) {
+            this.StopMoving();
+            var diffX = obj.Position.X - this.Position.X;
+            var diffY = obj.Position.Y - this.Position.Y;
+            if (Math.Abs(diffX) > Math.Abs(diffY)) {
+                if (diffX > 0)
+                    this.Direction = Direction.Right;
+                else if (diffX < 0)
+                    this.Direction = Direction.Left;
+            } else {
+                if (diffY > 0)
+                    this.Direction = Direction.Down;
+                else if (diffY < 0)
+                    this.Direction = Direction.Up;
+            }
+            this.UpdateAnimation();
+        }
+
+        public void StopAndFace(Direction direction) {
+            this.StopMoving();
+            this.Direction = direction;
+            this.UpdateAnimation();
         }
 
     }

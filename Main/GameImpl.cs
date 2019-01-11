@@ -16,11 +16,11 @@ namespace AnimalTownGame.Main {
 
         private readonly GraphicsDeviceManager graphicsManager;
         public SpriteBatch SpriteBatch { get; private set; }
-        private Camera camera;
+        public Camera Camera { get; private set; }
 
-        private Dictionary<string, Map> maps = new Dictionary<string, Map>();
+        public readonly Dictionary<string, Map> Maps = new Dictionary<string, Map>();
         public Player Player { get; private set; }
-        public Map CurrentMap => this.Player.Map;
+        public Map CurrentMap => this.Player?.Map;
 
         private DateTime lastRealTimeUpdate = DateTime.Now;
 
@@ -46,42 +46,46 @@ namespace AnimalTownGame.Main {
             var villager = new Villager("Player", town, new Vector2(35.5F, 32.5F));
             town.DynamicObjects.Add(villager);
 
-            var house = new VillagerHouse(VillagerHouse.Textures[0], town, new Vector2(20, 20));
+            var houseMap = this.AddMap(MapGenerator.GenerateHouse("House1", new Point(20, 20)));
+            var house = new VillagerHouse(VillagerHouse.Textures[0], town, new Vector2(20, 20), houseMap.Name, new Vector2(5.5F, 9.5F));
             town.StaticObjects.Add(house);
 
-            this.camera = new Camera(this.Player) {Scale = 80F};
-            this.camera.FixPosition(this.CurrentMap);
-
-            for (int x = 0; x < 10; x++)
-                for (int y = 0; y < 10; y++)
-                    if (x % 2 == 0)
-                        town.SetTile(new Point(40 + x, 40 + y), Registry.TileWater);
+            this.Camera = new Camera(this.Player) {Scale = 80F};
+            this.Camera.FixPosition(this.CurrentMap);
         }
 
         protected override void Update(GameTime gameTime) {
-            InputManager.Update();
+            InputManager.Update(this.CurrentMap, this.Camera);
+            CutsceneManager.Update();
 
-            foreach (var map in this.maps.Values)
+            foreach (var map in this.Maps.Values)
                 map.Update(gameTime, map == this.CurrentMap);
 
             var now = DateTime.Now;
             var passed = now.Subtract(this.lastRealTimeUpdate);
             if (passed.Minutes >= 10) {
-                foreach (var map in this.maps.Values)
+                foreach (var map in this.Maps.Values)
                     map.UpdateRealTime(now, this.lastRealTimeUpdate, passed);
                 this.lastRealTimeUpdate = now;
             }
 
-            this.camera.Update(this.CurrentMap);
+            this.Camera.Update(this.CurrentMap);
         }
 
         protected override void Draw(GameTime gameTime) {
-            this.GraphicsDevice.Clear(Color.Aqua);
-            MapRenderer.RenderMap(this.SpriteBatch, this.CurrentMap, this.GraphicsDevice.Viewport, this.camera);
+            var view = this.GraphicsDevice.Viewport;
+            if (this.CurrentMap != null) {
+                this.GraphicsDevice.Clear(this.CurrentMap.IsInside ? new Color(36, 39, 51) : Color.Aqua);
+                MapRenderer.RenderMap(this.SpriteBatch, this.CurrentMap, view, this.Camera);
+            } else
+                this.GraphicsDevice.Clear(Color.Black);
+
+            InputManager.Draw(this.SpriteBatch);
+            CutsceneManager.Draw(this.SpriteBatch, view);
         }
 
         private Map AddMap(Map map) {
-            this.maps[map.Name] = map;
+            this.Maps[map.Name] = map;
             return map;
         }
 

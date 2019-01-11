@@ -11,6 +11,7 @@ namespace AnimalTownGame.Maps {
         public readonly string Name;
         public readonly int WidthInTiles;
         public readonly int HeightInTiles;
+        public readonly bool IsInside;
         private readonly Tile[,] tileGrid;
 
         public readonly List<DynamicObject> DynamicObjects = new List<DynamicObject>();
@@ -23,10 +24,11 @@ namespace AnimalTownGame.Maps {
         public readonly Random Random = new Random();
         public int Ticks { get; private set; }
 
-        public Map(string name, int widthInTiles, int heightInTiles) {
+        public Map(string name, int widthInTiles, int heightInTiles, bool isInside) {
             this.Name = name;
             this.WidthInTiles = widthInTiles;
             this.HeightInTiles = heightInTiles;
+            this.IsInside = isInside;
             this.tileGrid = new Tile[widthInTiles, heightInTiles];
         }
 

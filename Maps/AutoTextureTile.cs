@@ -1,5 +1,6 @@
 using AnimalTownGame.Main;
 using AnimalTownGame.Misc;
+using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -218,35 +219,40 @@ namespace AnimalTownGame.Maps {
         }
 
         public override void Draw(SpriteBatch batch) {
-            var atlas = Registry.TextureOutside;
+            var atlas = this.Type.Texture;
             var topLeft = atlas.GetRegion(this.topLeftCoord.X, this.topLeftCoord.Y);
+            var depth = this.GetRenderDepth();
             batch.Draw(
                 atlas.Texture,
                 this.Position.ToVector2(),
                 new Rectangle(topLeft.X, topLeft.Y, topLeft.Width / 2, topLeft.Height / 2),
                 Color.White, 0F, Vector2.Zero,
-                new Vector2(1F / topLeft.Width, 1F / topLeft.Height), SpriteEffects.None, 0);
+                new Vector2(1F / topLeft.Width, 1F / topLeft.Height), SpriteEffects.None, depth);
             var topRight = atlas.GetRegion(this.topRightCoord.X, this.topRightCoord.Y);
             batch.Draw(
                 atlas.Texture,
                 this.Position.ToVector2() + new Vector2(0.5F, 0F),
                 new Rectangle(topRight.X + topRight.Width / 2, topRight.Y, topRight.Width / 2, topRight.Height / 2),
                 Color.White, 0F, Vector2.Zero,
-                new Vector2(1F / topRight.Width, 1F / topRight.Height), SpriteEffects.None, 0);
+                new Vector2(1F / topRight.Width, 1F / topRight.Height), SpriteEffects.None, depth);
             var bottomLeft = atlas.GetRegion(this.bottomLeftCoord.X, this.bottomLeftCoord.Y);
             batch.Draw(
                 atlas.Texture,
                 this.Position.ToVector2() + new Vector2(0F, 0.5F),
                 new Rectangle(bottomLeft.X, bottomLeft.Y + bottomLeft.Height / 2, bottomLeft.Width / 2, bottomLeft.Height / 2),
                 Color.White, 0F, Vector2.Zero,
-                new Vector2(1F / bottomLeft.Width, 1F / bottomLeft.Height), SpriteEffects.None, 0);
+                new Vector2(1F / bottomLeft.Width, 1F / bottomLeft.Height), SpriteEffects.None, depth);
             var bottomRight = atlas.GetRegion(this.bottomRightCoord.X, this.bottomRightCoord.Y);
             batch.Draw(
                 atlas.Texture,
                 this.Position.ToVector2() + new Vector2(0.5F, 0.5F),
                 new Rectangle(bottomRight.X + bottomRight.Width / 2, bottomRight.Y + bottomRight.Height / 2, bottomRight.Width / 2, bottomRight.Height / 2),
                 Color.White, 0F, Vector2.Zero,
-                new Vector2(1F / bottomRight.Width, 1F / bottomRight.Height), SpriteEffects.None, 0);
+                new Vector2(1F / bottomRight.Width, 1F / bottomRight.Height), SpriteEffects.None, depth);
+        }
+
+        public virtual float GetRenderDepth() {
+            return 0;
         }
 
     }
@@ -255,7 +261,7 @@ namespace AnimalTownGame.Maps {
 
         public readonly bool HasInnerCorners;
 
-        public AutoTextureType(Point textureCoord, bool hasInnerCorners) : base(textureCoord) {
+        public AutoTextureType(Point textureCoord, bool hasInnerCorners, TextureAtlas texture = null) : base(textureCoord, texture) {
             this.HasInnerCorners = hasInnerCorners;
         }
 
