@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AnimalTownGame.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 namespace AnimalTownGame.Interfaces {
     public class Interface {
@@ -18,15 +19,7 @@ namespace AnimalTownGame.Interfaces {
                 comp.Draw(batch);
         }
 
-        public virtual void InitPositions(Viewport viewport) {
-        }
-
-        public virtual bool OnMouse(Point pos, PressType[] pressTypes) {
-            return false;
-        }
-
-        public virtual bool OnKeyboard(string bind, PressType type) {
-            return false;
+        public virtual void InitPositions(Viewport viewport, Size2 viewportSize) {
         }
 
         public virtual void OnOpen() {

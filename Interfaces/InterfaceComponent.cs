@@ -19,13 +19,5 @@ namespace AnimalTownGame.Interfaces {
 
         public virtual void Draw(SpriteBatch batch) {
         }
-
-        public virtual bool OnMouse(Point pos, PressType[] pressTypes) {
-            return false;
-        }
-
-        public virtual bool OnKeyboard(string bind, PressType type) {
-            return false;
-        }
     }
 }

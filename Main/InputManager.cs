@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AnimalTownGame.Interfaces;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Objects;
 using AnimalTownGame.Rendering;
@@ -12,7 +13,7 @@ namespace AnimalTownGame.Main {
     public static class InputManager {
 
         private static readonly Dictionary<string, Keybind> Keybinds = new Dictionary<string, Keybind>();
-        private static readonly PressType[] mousePressTypes = new PressType[2];
+        private static readonly PressType[] MousePressTypes = new PressType[2];
 
         static InputManager() {
             AddKeybind(new Keybind("Up", Keys.W));
@@ -20,8 +21,17 @@ namespace AnimalTownGame.Main {
             AddKeybind(new Keybind("Down", Keys.S));
             AddKeybind(new Keybind("Right", Keys.D));
             AddKeybind(new Keybind("Slow", Keys.LeftShift));
-            AddKeybind(new Keybind("Inventory", Keys.E));
-            AddKeybind(new Keybind("Escape", Keys.Escape));
+            AddKeybind(new Keybind("Inventory", Keys.E, (oldType, newType) => {
+                if (newType == PressType.Pressed)
+                    if (InterfaceManager.CurrentInterface == null)
+                        InterfaceManager.SetInterface(new Inventory(GameImpl.Instance.Player));
+                    else if (InterfaceManager.CurrentInterface is Inventory)
+                        InterfaceManager.SetInterface(null);
+            }));
+            AddKeybind(new Keybind("Escape", Keys.Escape, (oldType, newType) => {
+                if (newType == PressType.Pressed && InterfaceManager.CurrentInterface != null)
+                    InterfaceManager.SetInterface(null);
+            }));
         }
 
         public static void AddKeybind(Keybind bind) {
@@ -33,7 +43,7 @@ namespace AnimalTownGame.Main {
         }
 
         public static PressType GetMouseType(int index) {
-            return mousePressTypes[index];
+            return MousePressTypes[index];
         }
 
         public static void Update(Map map, Camera camera) {
@@ -41,27 +51,23 @@ namespace AnimalTownGame.Main {
             for (var i = 0; i < 2; i++) {
                 var button = i == 0 ? mouse.LeftButton : mouse.RightButton;
                 if (button == ButtonState.Pressed) {
-                    if (mousePressTypes[i] < PressType.Down)
-                        mousePressTypes[i]++;
+                    if (MousePressTypes[i] < PressType.Down)
+                        MousePressTypes[i]++;
                 } else
-                    mousePressTypes[i] = PressType.Nothing;
+                    MousePressTypes[i] = PressType.Nothing;
             }
-            if (!InterfaceManager.HandleMouse(mouse.Position, mousePressTypes) && map != null) {
+            if (map != null && InterfaceManager.CurrentInterface == null) {
                 var pos = camera.ToWorldPos(mouse.Position.ToVector2());
                 MouseOverObjects(map.StaticObjects, pos);
                 MouseOverObjects(map.DynamicObjects, pos);
             }
 
             var keyboard = Keyboard.GetState();
-            var keyUsed = false;
             foreach (var bind in Keybinds.Values) {
                 var newType = bind.Type;
                 if (keyboard.IsKeyDown(bind.Key)) {
                     if (bind.Type < PressType.Down)
                         newType = bind.Type + 1;
-
-                    if (!keyUsed && InterfaceManager.HandleKeyboard(bind.Name, newType))
-                        keyUsed = true;
                 } else
                     newType = PressType.Nothing;
 

@@ -3,12 +3,13 @@ using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace AnimalTownGame.Main {
     public static class InterfaceManager {
 
         private static readonly TextureAtlas CursorsTexture = new TextureAtlas("Interfaces/Cursors", 16, 16);
-        public static SpriteFont NormalFont = GameImpl.LoadContent<SpriteFont>("Interfaces/NormalFont");
+        public static readonly SpriteFont NormalFont = GameImpl.LoadContent<SpriteFont>("Interfaces/NormalFont");
 
         public const int Scale = 5;
         public static readonly Interface Overlay = new Overlay();
@@ -27,7 +28,8 @@ namespace AnimalTownGame.Main {
                 CurrentInterface.OnClose();
             CurrentInterface = inter;
             if (inter != null) {
-                inter.InitPositions(GameImpl.Instance.GraphicsDevice.Viewport);
+                var view = GameImpl.Instance.GraphicsDevice.Viewport;
+                inter.InitPositions(view, new Size2(view.Width, view.Height) / Scale);
                 inter.OnOpen();
             }
         }
@@ -59,32 +61,11 @@ namespace AnimalTownGame.Main {
             lastMousePos = Mouse.GetState().Position;
         }
 
-        public static bool HandleMouse(Point pos, PressType[] pressTypes) {
-            if (CurrentInterface == null)
-                return false;
-            if (CurrentInterface.OnMouse(pos, pressTypes))
-                return true;
-            foreach (var component in CurrentInterface.Components)
-                if (component.OnMouse(pos, pressTypes))
-                    return true;
-            return true;
-        }
-
-        public static bool HandleKeyboard(string bind, PressType type) {
-            if (CurrentInterface == null)
-                return false;
-            if (CurrentInterface.OnKeyboard(bind, type))
-                return true;
-            foreach (var component in CurrentInterface.Components)
-                if (component.OnKeyboard(bind, type))
-                    return true;
-            return true;
-        }
-
         public static void OnWindowSizeChange(Viewport viewport) {
-            Overlay.InitPositions(viewport);
+            var size = new Size2(viewport.Width, viewport.Height) / Scale;
+            Overlay.InitPositions(viewport, size);
             if (CurrentInterface != null)
-                CurrentInterface.InitPositions(viewport);
+                CurrentInterface.InitPositions(viewport, size);
         }
 
     }

@@ -1,4 +1,5 @@
 using System;
+using AnimalTownGame.Items;
 using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
 using Microsoft.Xna.Framework;
@@ -6,8 +7,14 @@ using Microsoft.Xna.Framework;
 namespace AnimalTownGame.Objects.Characters {
     public class Player : Character {
 
+        public readonly Item[] Inventory = new Item[24];
+
         public Player(Map map, Vector2 position) : base("Player", map, position) {
             this.WalkSpeed = 0.03F;
+
+            this.Inventory[4] = Registry.ItemWhiteLamp.Instance();
+            this.Inventory[7] = Registry.ItemWhiteLamp.Instance();
+            this.Inventory[22] = Registry.ItemWhiteLamp.Instance();
         }
 
         public override void Update(GameTime gameTime, bool isCurrent) {

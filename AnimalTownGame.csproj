@@ -56,7 +56,10 @@
   <ItemGroup>
     <Compile Include="Interfaces\Interface.cs" />
     <Compile Include="Interfaces\InterfaceComponent.cs" />
+    <Compile Include="Interfaces\Inventory.cs" />
     <Compile Include="Interfaces\Overlay.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\ItemFurniture.cs" />
     <Compile Include="Main\CutsceneManager.cs" />
     <Compile Include="Main\GameImpl.cs" />
     <Compile Include="Main\InputManager.cs" />
@@ -93,8 +96,10 @@
     <Content Include="Content\Characters\Player.png" />
     <Content Include="Content\Content.mgcb" />
     <Content Include="Content\Interfaces\Cursors.png" />
+    <Content Include="Content\Interfaces\Inventory.png" />
     <Content Include="Content\Interfaces\NormalFont.spritefont" />
     <Content Include="Content\Interfaces\Overlay.png" />
+    <Content Include="Content\Items\Icons.png" />
     <Content Include="Content\Objects\Furniture\MarbleCounter.png" />
     <Content Include="Content\Objects\Furniture\MarbleCounterSink.png" />
     <Content Include="Content\Objects\Furniture\RedRug.png" />
