@@ -11,7 +11,7 @@ namespace AnimalTownGame.Objects.Characters {
         }
 
         public override void Update(GameTime gameTime, bool isCurrent) {
-            if (!CutsceneManager.IsCutsceneActive()) {
+            if (!CutsceneManager.IsCutsceneActive && InterfaceManager.CurrentInterface == null) {
                 var speed = InputManager.GetKeyType("Slow") > 0 ? this.WalkSpeed * 0.5F : this.WalkSpeed;
                 var vel = new Vector2();
 

@@ -22,7 +22,8 @@ namespace AnimalTownGame.Main {
         public Player Player { get; private set; }
         public Map CurrentMap => this.Player?.Map;
 
-        private DateTime lastRealTimeUpdate = DateTime.Now;
+        public static DateTime CurrentTime => DateTime.Now;
+        private DateTime lastRealTimeUpdate = CurrentTime;
 
         public GameImpl() {
             Instance = this;
@@ -33,6 +34,7 @@ namespace AnimalTownGame.Main {
             };
             this.Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
+            this.Window.ClientSizeChanged += this.OnWindowSizeChange;
         }
 
         protected override void LoadContent() {
@@ -47,7 +49,7 @@ namespace AnimalTownGame.Main {
             town.DynamicObjects.Add(villager);
 
             var houseMap = this.AddMap(MapGenerator.GenerateHouse("House1", new Point(20, 20)));
-            var house = new VillagerHouse(VillagerHouse.Textures[0], town, new Vector2(20, 20), houseMap.Name, new Vector2(5.5F, 9.5F));
+            var house = new VillagerHouse(VillagerHouse.Textures[0], town, new Vector2(20, 20), houseMap.Name);
             town.StaticObjects.Add(house);
 
             this.Camera = new Camera(this.Player) {Scale = 80F};
@@ -55,13 +57,14 @@ namespace AnimalTownGame.Main {
         }
 
         protected override void Update(GameTime gameTime) {
+            InterfaceManager.Update(gameTime);
             InputManager.Update(this.CurrentMap, this.Camera);
             CutsceneManager.Update();
 
             foreach (var map in this.Maps.Values)
                 map.Update(gameTime, map == this.CurrentMap);
 
-            var now = DateTime.Now;
+            var now = CurrentTime;
             var passed = now.Subtract(this.lastRealTimeUpdate);
             if (passed.Minutes >= 10) {
                 foreach (var map in this.Maps.Values)
@@ -80,8 +83,13 @@ namespace AnimalTownGame.Main {
             } else
                 this.GraphicsDevice.Clear(Color.Black);
 
-            InputManager.Draw(this.SpriteBatch);
+            InterfaceManager.Draw(this.SpriteBatch);
             CutsceneManager.Draw(this.SpriteBatch, view);
+        }
+
+        private void OnWindowSizeChange(object window, EventArgs args) {
+            this.Camera.FixPosition(this.CurrentMap);
+            InterfaceManager.OnWindowSizeChange(this.GraphicsDevice.Viewport);
         }
 
         private Map AddMap(Map map) {

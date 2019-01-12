@@ -11,13 +11,8 @@ using MonoGame.Extended;
 namespace AnimalTownGame.Main {
     public static class InputManager {
 
-        private static readonly Texture2D CursorsTexture = GameImpl.LoadContent<Texture2D>("Interfaces/Cursors");
         private static readonly Dictionary<string, Keybind> Keybinds = new Dictionary<string, Keybind>();
-        private static PressType leftClickPressType;
-        private static PressType rightClickPressType;
-        private static CursorType currentCursor;
-        private static float cursorAlpha;
-        private static Point lastMousePos;
+        private static readonly PressType[] mousePressTypes = new PressType[2];
 
         static InputManager() {
             AddKeybind(new Keybind("Up", Keys.W));
@@ -33,48 +28,40 @@ namespace AnimalTownGame.Main {
             Keybinds.Add(bind.Name, bind);
         }
 
-        public static void SetCursorType(CursorType type, float alpha) {
-            currentCursor = type;
-            cursorAlpha = alpha;
-        }
-
         public static PressType GetKeyType(string name) {
             return Keybinds[name].Type;
         }
 
-        public static PressType GetLeftMouse() {
-            return leftClickPressType;
-        }
-
-        public static PressType GetRightMouse() {
-            return rightClickPressType;
+        public static PressType GetMouseType(int index) {
+            return mousePressTypes[index];
         }
 
         public static void Update(Map map, Camera camera) {
-            SetCursorType(CursorType.Default, 1F);
             var mouse = Mouse.GetState();
-            if (mouse.LeftButton == ButtonState.Pressed) {
-                if (leftClickPressType < PressType.Down)
-                    leftClickPressType++;
-            } else
-                leftClickPressType = PressType.Nothing;
-            if (mouse.RightButton == ButtonState.Pressed) {
-                if (rightClickPressType < PressType.Down)
-                    rightClickPressType++;
-            } else
-                rightClickPressType = PressType.Nothing;
-            if (map != null) {
-                var pos = camera.ToWorldPos(lastMousePos.ToVector2());
+            for (var i = 0; i < 2; i++) {
+                var button = i == 0 ? mouse.LeftButton : mouse.RightButton;
+                if (button == ButtonState.Pressed) {
+                    if (mousePressTypes[i] < PressType.Down)
+                        mousePressTypes[i]++;
+                } else
+                    mousePressTypes[i] = PressType.Nothing;
+            }
+            if (!InterfaceManager.HandleMouse(mouse.Position, mousePressTypes) && map != null) {
+                var pos = camera.ToWorldPos(mouse.Position.ToVector2());
                 MouseOverObjects(map.StaticObjects, pos);
                 MouseOverObjects(map.DynamicObjects, pos);
             }
 
             var keyboard = Keyboard.GetState();
+            var keyUsed = false;
             foreach (var bind in Keybinds.Values) {
                 var newType = bind.Type;
                 if (keyboard.IsKeyDown(bind.Key)) {
                     if (bind.Type < PressType.Down)
                         newType = bind.Type + 1;
+
+                    if (!keyUsed && InterfaceManager.HandleKeyboard(bind.Name, newType))
+                        keyUsed = true;
                 } else
                     newType = PressType.Nothing;
 
@@ -84,19 +71,6 @@ namespace AnimalTownGame.Main {
                     bind.Type = newType;
                 }
             }
-        }
-
-        public static void Draw(SpriteBatch batch) {
-            if (currentCursor >= 0) {
-                batch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp);
-                batch.Draw(
-                    CursorsTexture,
-                    new Rectangle(lastMousePos, new Point(32, 32)),
-                    new Rectangle((int) currentCursor % 4 * 16, (int) currentCursor / 4 * 16, 16, 16),
-                    Color.Multiply(Color.White, cursorAlpha));
-                batch.End();
-            }
-            lastMousePos = Mouse.GetState().Position;
         }
 
         private static void MouseOverObjects(IEnumerable<MapObject> objects, Vector2 mousePos) {

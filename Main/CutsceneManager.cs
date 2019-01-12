@@ -3,11 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 
 namespace AnimalTownGame.Main {
-    public class CutsceneManager {
+    public static class CutsceneManager {
 
         private static float fadeSpeed;
         private static float fadePercentage;
         private static OnFaded fadeCallback;
+        public static bool IsCutsceneActive => fadePercentage > 0F;
 
         public static void Update() {
             if (fadeSpeed != 0) {
@@ -31,10 +32,6 @@ namespace AnimalTownGame.Main {
         public static void Fade(float speed, OnFaded callback = null) {
             fadeSpeed = speed;
             fadeCallback = callback;
-        }
-
-        public static bool IsCutsceneActive() {
-            return fadePercentage > 0F;
         }
 
         public delegate void OnFaded();
