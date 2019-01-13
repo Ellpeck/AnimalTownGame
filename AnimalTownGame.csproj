@@ -54,10 +54,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\Components\ComponentHover.cs" />
     <Compile Include="Interfaces\Components\InterfaceComponent.cs" />
+    <Compile Include="Interfaces\Components\InvContextMenu.cs" />
     <Compile Include="Interfaces\Components\ItemSlot.cs" />
     <Compile Include="Interfaces\Interface.cs" />
     <Compile Include="Interfaces\Inventory.cs" />
+    <Compile Include="Interfaces\ItemInterface.cs" />
     <Compile Include="Interfaces\Overlay.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemFurniture.cs" />

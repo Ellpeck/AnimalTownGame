@@ -40,23 +40,13 @@ namespace AnimalTownGame.Main {
         }
 
         public static void HandleMouse(MouseButton button, PressType type) {
-            if (CurrentInterface == null)
-                return;
-            if (CurrentInterface.OnMouse(button, type))
-                return;
-            foreach (var component in CurrentInterface.Components)
-                if (component.OnMouse(button, type))
-                    return;
+            if (CurrentInterface != null)
+                CurrentInterface.OnMouse(button, type);
         }
 
         public static void HandleKeyboard(string bind, PressType type) {
-            if (CurrentInterface == null)
-                return;
-            if (CurrentInterface.OnKeyboard(bind, type))
-                return;
-            foreach (var component in CurrentInterface.Components)
-                if (component.OnKeyboard(bind, type))
-                    return;
+            if (CurrentInterface != null)
+                CurrentInterface.OnKeyboard(bind, type);
         }
 
         public static void Draw(SpriteBatch batch, Viewport viewport) {
@@ -87,6 +77,7 @@ namespace AnimalTownGame.Main {
             if (CurrentInterface != null)
                 CurrentInterface.Init(viewport, size);
         }
+
     }
 
     public enum CursorType {
