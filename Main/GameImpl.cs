@@ -42,17 +42,17 @@ namespace AnimalTownGame.Main {
             this.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
 
             var town = this.AddMap(MapGenerator.GenerateTown());
-            this.Player = new Player(town, new Vector2(32.5F, 32.5F));
+            this.Player = new Player(town, new Vector2(22.5F, 22.5F));
             town.DynamicObjects.Add(this.Player);
 
             var villager = new Villager("Player", town, new Vector2(35.5F, 32.5F));
             town.DynamicObjects.Add(villager);
 
             var houseMap = this.AddMap(MapGenerator.GenerateHouse("House1", new Point(20, 20)));
-            var house = new VillagerHouse(VillagerHouse.Textures[0], town, new Vector2(20, 20), houseMap.Name);
+            var house = new VillagerHouse(0, town, new Vector2(20, 20), houseMap.Name);
             town.StaticObjects.Add(house);
 
-            this.Camera = new Camera(this.Player) {Scale = 80F};
+            this.Camera = new Camera(this.Player);
             this.Camera.FixPosition(this.CurrentMap);
         }
 
@@ -83,7 +83,7 @@ namespace AnimalTownGame.Main {
             } else
                 this.GraphicsDevice.Clear(Color.Black);
 
-            InterfaceManager.Draw(this.SpriteBatch, view);
+            InterfaceManager.Draw(this.SpriteBatch, view, this.Camera);
             CutsceneManager.Draw(this.SpriteBatch, view);
         }
 

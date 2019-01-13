@@ -10,6 +10,10 @@ namespace AnimalTownGame.Misc {
             return value < (float) i ? i - 1 : i;
         }
 
+        public static Vector2 Floor(this Vector2 value) {
+            return new Vector2(value.X.Floor(), value.Y.Floor());
+        }
+
         public static int Ceil(this float value) {
             var i = (int) value;
             return value > (float) i ? i + 1 : i;

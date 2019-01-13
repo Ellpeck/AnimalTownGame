@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Objects;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 
 namespace AnimalTownGame.Misc {
     public static class PathFinding {
 
         public const int DefaultPathfindCost = 1000;
 
-        public static Stack<Point> FindPath(Map map, DynamicObject obj, Point start, Point goal, int maxTries) {
+        public static Stack<Point> FindPath(Map map, RectangleF collisionBounds, Point start, Point goal, int maxTries) {
             var open = new HashSet<PathPoint>();
             var closed = new HashSet<PathPoint>();
             open.Add(new PathPoint(start, goal, null, 0));
@@ -34,7 +35,7 @@ namespace AnimalTownGame.Misc {
 
                 foreach (var dir in Direction.Adjacents) {
                     var neighborPos = current.Pos + dir.Offset;
-                    var cost = GetCost(map, neighborPos, obj);
+                    var cost = GetCost(map, neighborPos, collisionBounds);
                     if (cost < int.MaxValue) {
                         var neighbor = new PathPoint(neighborPos, goal, current, cost);
                         if (!closed.Contains(neighbor)) {
@@ -66,10 +67,10 @@ namespace AnimalTownGame.Misc {
             return path;
         }
 
-        private static int GetCost(Map map, Point point, DynamicObject obj) {
+        private static int GetCost(Map map, Point point, RectangleF collisionBounds) {
             if (!map.IsInBounds(point.X, point.Y))
                 return int.MaxValue;
-            if (obj.IsCollidingPos(point.ToVector2()))
+            if (MapObject.IsCollidingPos(map, point.ToVector2(), collisionBounds, null))
                 return int.MaxValue;
             var tile = map[point];
             return tile != null ? tile.Type.Walkability : DefaultPathfindCost;

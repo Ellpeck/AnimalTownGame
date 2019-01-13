@@ -10,15 +10,17 @@ using MonoGame.Extended;
 namespace AnimalTownGame.Interfaces.Components {
     public class ItemSlot : InterfaceComponent {
 
+        public readonly Vector2 Position;
         public readonly Item[] Items;
         public readonly int Index;
         public new readonly ItemInterface Interface;
         private ComponentHover hoverInfo;
 
-        public ItemSlot(ItemInterface iface, Vector2 position, Item[] items, int index) : base(iface, position) {
+        public ItemSlot(ItemInterface iface, Vector2 position, Item[] items, int index) : base(iface) {
             this.Items = items;
             this.Index = index;
             this.Interface = iface;
+            this.Position = position;
         }
 
         public override bool OnMouse(MouseButton button, PressType type) {
@@ -36,9 +38,9 @@ namespace AnimalTownGame.Interfaces.Components {
         public override void Update(GameTime time) {
             base.Update(time);
 
-            if (this.IsMousedComponent()) {
-                var item = this.Items[this.Index];
-                if (item != null && this.hoverInfo == null) {
+            var item = this.Items[this.Index];
+            if (item != null && this.Interface.CursorItem == null && this.IsMousedComponent()) {
+                if (this.hoverInfo == null) {
                     this.hoverInfo = new ComponentHover(this, item.GetName());
                     this.Interface.AddComponent(this.hoverInfo);
                 }

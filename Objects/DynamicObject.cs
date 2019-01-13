@@ -31,39 +31,7 @@ namespace AnimalTownGame.Objects {
         }
 
         public bool IsCollidingPos(Vector2 pos) {
-            if (!this.Map.IsInBounds(pos.X.Floor(), pos.Y.Floor()))
-                return true;
-
-            var myBounds = this.CollisionBounds;
-            myBounds.Offset(pos);
-            for (var x = 0; x <= myBounds.Width.Ceil(); x++)
-                for (var y = 0; y <= myBounds.Height.Ceil(); y++) {
-                    var tile = this.Map[myBounds.X.Floor() + x, myBounds.Y.Floor() + y];
-                    if (tile == null)
-                        continue;
-                    var bounds = tile.GetCollisionBounds();
-                    if (bounds != Rectangle.Empty && myBounds.Intersects(bounds))
-                        return true;
-                }
-
-            if (this.Collides(myBounds, this.Map.StaticObjects))
-                return true;
-            if (this.Collides(myBounds, this.Map.DynamicObjects))
-                return true;
-
-            return false;
-        }
-
-        private bool Collides(RectangleF myBounds, IEnumerable<MapObject> objects) {
-            foreach (var obj in objects) {
-                if (obj == this)
-                    continue;
-                var otherBounds = obj.CollisionBounds;
-                otherBounds.Offset(obj.Position);
-                if (myBounds.Intersects(otherBounds))
-                    return true;
-            }
-            return false;
+            return IsCollidingPos(this.Map, pos, this.CollisionBounds, this);
         }
 
         public virtual void Teleport(Map newMap, Vector2 pos) {

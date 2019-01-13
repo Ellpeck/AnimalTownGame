@@ -1,16 +1,67 @@
+using System.Collections.Generic;
+using AnimalTownGame.Interfaces.Components;
+using AnimalTownGame.Main;
+using AnimalTownGame.Maps;
+using AnimalTownGame.Objects.Static;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 namespace AnimalTownGame.Items {
     public class ItemFurniture : Item {
 
-        public ItemFurniture(ItemType type) : base(type) {
+        public new readonly FurnitureType Type;
+
+        public ItemFurniture(FurnitureType type) : base(type) {
+            this.Type = type;
+        }
+
+        public override IEnumerable<InterfaceComponent> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
+            var map = GameImpl.Instance.CurrentMap;
+            if (map != null && map.IsInside)
+                yield return new ComponentButton(menu,
+                    new RectangleF(menu.Bounds.Position + new Vector2(1, 1), new Size2(menu.Bounds.Width - 2, 6)), "Place",
+                    (button, pressType) => {
+                        if (button == MouseButton.Left && pressType == PressType.Pressed) {
+                            InterfaceManager.Overlay.CursorItem = this;
+                            slot.Items[slot.Index] = null;
+                            InterfaceManager.SetInterface(null);
+                            return true;
+                        }
+                        return false;
+                    });
+        }
+
+        public void DrawPreview(SpriteBatch batch, Vector2 position, Color color, bool offset) {
+            var tex = this.Type.Texture;
+            var bounds = this.Type.RenderBounds;
+            var pos = offset ? position + bounds.Position : position;
+            batch.Draw(tex, pos, null, color, 0F, Vector2.Zero,
+                new Vector2(bounds.Width / tex.Width, bounds.Height / tex.Height),
+                SpriteEffects.None, 0);
         }
 
     }
 
     public class FurnitureType : ItemType {
 
-        public FurnitureType(string name) : base(name, new Point(0, 0)) {
+        public readonly Texture2D Texture;
+        public readonly RectangleF RenderBounds;
+        public readonly RectangleF CollisionBounds;
+        public readonly RectangleF PlacementBounds;
+        public float DepthOffset;
+
+        public FurnitureType(string name, string texture, RectangleF renderBounds, RectangleF collisionBounds, RectangleF? placementBounds = null)
+            : base(name, new Point(0, 0)) {
+            this.Texture = GameImpl.LoadContent<Texture2D>("Objects/Furniture/" + texture);
+            this.RenderBounds = renderBounds;
+            this.CollisionBounds = collisionBounds;
+            this.PlacementBounds = placementBounds ?? collisionBounds;
+        }
+
+        public FurnitureType SetDepthOffset(float offset) {
+            this.DepthOffset = offset;
+            return this;
         }
 
         public override Item Instance() {

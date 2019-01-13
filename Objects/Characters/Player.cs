@@ -17,6 +17,9 @@ namespace AnimalTownGame.Objects.Characters {
             this.Inventory[2] = Registry.ItemWhiteLamp.Instance();
             this.Inventory[3] = Registry.ItemWhiteLamp.Instance();
             this.Inventory[4] = Registry.ItemWhiteLamp.Instance();
+            this.Inventory[5] = Registry.ItemRedRug.Instance();
+            this.Inventory[6] = Registry.ItemRedRug.Instance();
+            this.Inventory[7] = Registry.ItemRedRug.Instance();
         }
 
         public override void Update(GameTime gameTime, bool isCurrent) {

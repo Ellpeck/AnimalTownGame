@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using AnimalTownGame.Interfaces.Components;
 using AnimalTownGame.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,6 +26,10 @@ namespace AnimalTownGame.Items {
 
         public virtual string GetName() {
             return this.Type.Name;
+        }
+
+        public virtual IEnumerable<InterfaceComponent> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
+            return null;
         }
 
     }

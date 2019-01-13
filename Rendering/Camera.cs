@@ -6,8 +6,8 @@ using Microsoft.Xna.Framework;
 namespace AnimalTownGame.Rendering {
     public class Camera {
 
+        public const float Scale = 80F;
         public Vector2 Position;
-        public float Scale;
         public MapObject FollowedObject;
 
         public Vector2? PanToPosition;
@@ -18,12 +18,12 @@ namespace AnimalTownGame.Rendering {
             this.FollowedObject = followedObject;
         }
 
-        public Matrix ViewMatrix => Matrix.CreateScale(this.Scale) * Matrix.CreateTranslation(-(int) this.Position.X, -(int) this.Position.Y, 0F);
+        public Matrix ViewMatrix => Matrix.CreateScale(Scale) * Matrix.CreateTranslation(-(int) this.Position.X, -(int) this.Position.Y, 0F);
 
         public void Update(Map map) {
             var desired = this.GetDesiredPosition(map);
             if (this.PanToPosition != null && this.PanSpeed > 0) {
-                if (Vector2.Distance(this.Position, desired) <= this.PanSpeed * this.Scale) {
+                if (Vector2.Distance(this.Position, desired) <= this.PanSpeed * Scale) {
                     this.PanToPosition = null;
                     this.PanSpeed = 0;
                     if (this.PanCallback != null) {
@@ -33,7 +33,7 @@ namespace AnimalTownGame.Rendering {
                 } else {
                     var diff = desired - this.Position;
                     diff.Normalize();
-                    this.Position += diff * this.PanSpeed * this.Scale;
+                    this.Position += diff * this.PanSpeed * Scale;
                 }
             } else
                 this.Position = Vector2.Lerp(this.Position, desired, 0.1F);
@@ -54,9 +54,9 @@ namespace AnimalTownGame.Rendering {
                 desired = this.FollowedObject.Position + bounds.Position + new Vector2(bounds.Width / 2, bounds.Height / 3);
             } else
                 return this.Position;
-            desired -= new Vector2(viewport.Width / 2F, viewport.Height / 2F) / this.Scale;
+            desired -= new Vector2(viewport.Width / 2F, viewport.Height / 2F) / Scale;
 
-            var maxX = map.WidthInTiles - viewport.Width / this.Scale;
+            var maxX = map.WidthInTiles - viewport.Width / Scale;
             if (maxX < 0)
                 desired.X = maxX / 2;
             else if (desired.X < 0)
@@ -64,7 +64,7 @@ namespace AnimalTownGame.Rendering {
             else if (desired.X > maxX)
                 desired.X = maxX;
 
-            var maxY = map.HeightInTiles - viewport.Height / this.Scale;
+            var maxY = map.HeightInTiles - viewport.Height / Scale;
             if (maxY < 0)
                 desired.Y = maxY / 2;
             else if (desired.Y < 0)
@@ -72,7 +72,7 @@ namespace AnimalTownGame.Rendering {
             else if (desired.Y > maxY)
                 desired.Y = maxY;
 
-            return desired * this.Scale;
+            return desired * Scale;
         }
 
         public Vector2 ToWorldPos(Vector2 pos) {

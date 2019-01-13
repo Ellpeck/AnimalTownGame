@@ -5,11 +5,9 @@ namespace AnimalTownGame.Interfaces.Components {
     public class InterfaceComponent : Interface, IComparable<InterfaceComponent> {
 
         public readonly Interface Interface;
-        public Vector2 Position;
 
-        public InterfaceComponent(Interface iface, Vector2 position) {
+        public InterfaceComponent(Interface iface) {
             this.Interface = iface;
-            this.Position = position;
         }
 
         public virtual int GetPriority() {
@@ -25,7 +23,7 @@ namespace AnimalTownGame.Interfaces.Components {
         }
 
         public bool IsMousedComponent() {
-            return this.Interface.GetMousedComponent() == this;
+            return this.IsMouseOver() && this.Interface.GetMousedComponent() == this;
         }
 
     }

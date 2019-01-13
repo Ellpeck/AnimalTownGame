@@ -14,7 +14,7 @@ namespace AnimalTownGame.Objects.Characters {
         }
 
         public void Pathfind(Point point, OnPathEnded callback) {
-            this.path = PathFinding.FindPath(this.Map, this, this.Position.ToPoint(), point, 10000);
+            this.path = PathFinding.FindPath(this.Map, this.CollisionBounds, this.Position.ToPoint(), point, 10000);
             this.onPathEnded = callback;
         }
 

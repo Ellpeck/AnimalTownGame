@@ -9,7 +9,7 @@ namespace AnimalTownGame.Interfaces.Components {
 
         private readonly string text;
 
-        public ComponentHover(Interface iface, string text) : base(iface, Vector2.Zero) {
+        public ComponentHover(Interface iface, string text) : base(iface) {
             this.text = text;
         }
 

@@ -6,15 +6,27 @@ namespace AnimalTownGame.Interfaces.Components {
     public class InvContextMenu : InterfaceComponent {
 
         public readonly ItemSlot Slot;
-        public readonly RectangleF Area;
+        public readonly RectangleF Bounds;
+        private readonly Inventory inventory;
 
-        public InvContextMenu(Interface iface, ItemSlot slot) : base(iface, slot.Position) {
+        public InvContextMenu(Inventory iface, ItemSlot slot, Vector2 position) : base(iface) {
             this.Slot = slot;
-            this.Area = new RectangleF(this.Position, new Size2(40, 60));
+            this.inventory = iface;
+            this.Bounds = new RectangleF(position, new Size2(20, 30));
+
+            var item = slot.Items[slot.Index];
+            if (item != null) {
+                this.Components.AddRange(item.GetContextMenu(this.Slot, this));
+            }
+        }
+
+        public void Close() {
+            this.inventory.Components.Remove(this);
+            this.inventory.ContextMenu = null;
         }
 
         public override void Draw(SpriteBatch batch) {
-            batch.FillRectangle(this.Area, new Color(Color.Black, 0.95F));
+            batch.FillRectangle(this.Bounds, new Color(Color.Black, 0.8F));
             base.Draw(batch);
         }
 
@@ -23,7 +35,7 @@ namespace AnimalTownGame.Interfaces.Components {
         }
 
         public override bool IsMouseOver() {
-            return this.Area.Contains(MousePos);
+            return this.Bounds.Contains(MousePos);
         }
 
     }

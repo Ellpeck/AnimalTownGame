@@ -52,12 +52,14 @@ namespace AnimalTownGame.Objects.Characters {
             }
 
             var myBounds = this.CollisionBounds;
-            myBounds.Offset(this.Position);
-            foreach (var obj in this.Map.StaticObjects) {
-                var bounds = obj.IntersectionBounds;
-                bounds.Offset(obj.Position);
-                if (myBounds.Intersects(bounds))
-                    obj.OnIntersectWith(this);
+            if (myBounds != RectangleF.Empty) {
+                myBounds.Offset(this.Position);
+                foreach (var obj in this.Map.StaticObjects) {
+                    var bounds = obj.IntersectionBounds;
+                    bounds.Offset(obj.Position);
+                    if (myBounds.Intersects(bounds))
+                        obj.OnIntersectWith(this);
+                }
             }
         }
 

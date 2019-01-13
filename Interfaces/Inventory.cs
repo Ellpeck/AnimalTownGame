@@ -11,7 +11,7 @@ namespace AnimalTownGame.Interfaces {
         private static readonly Texture2D Texture = GameImpl.LoadContent<Texture2D>("Interfaces/Inventory");
         private readonly Player player;
         private Vector2 position;
-        private InvContextMenu contextMenu;
+        public InvContextMenu ContextMenu;
 
         public Inventory(Player player) {
             this.player = player;
@@ -20,15 +20,13 @@ namespace AnimalTownGame.Interfaces {
         public override bool OnMouse(MouseButton button, PressType type) {
             if (type == PressType.Pressed) {
                 var moused = this.GetMousedComponent();
-                if (this.contextMenu != null && moused != this.contextMenu) {
-                    this.Components.Remove(this.contextMenu);
-                    this.contextMenu = null;
-                }
+                if (this.ContextMenu != null && moused != this.ContextMenu)
+                    this.ContextMenu.Close();
                 if (button == MouseButton.Right) {
                     var slot = moused as ItemSlot;
-                    if (slot != null) {
-                        this.contextMenu = new InvContextMenu(this, slot);
-                        this.AddComponent(this.contextMenu);
+                    if (slot?.Items[slot.Index] != null) {
+                        this.ContextMenu = new InvContextMenu(this, slot, MousePos);
+                        this.AddComponent(this.ContextMenu);
                         return true;
                     }
                 }

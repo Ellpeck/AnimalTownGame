@@ -12,7 +12,7 @@ namespace AnimalTownGame.Main {
         public static readonly SpriteFont NormalFont = GameImpl.LoadContent<SpriteFont>("Interfaces/NormalFont");
 
         public const int Scale = 5;
-        public static readonly Interface Overlay = new Overlay();
+        public static readonly Overlay Overlay = new Overlay();
         public static Interface CurrentInterface { get; private set; }
         private static CursorType currentCursor;
         private static float cursorAlpha;
@@ -27,29 +27,41 @@ namespace AnimalTownGame.Main {
                 CurrentInterface.OnClose();
             CurrentInterface = inter;
             if (inter != null) {
+                Overlay.OnClose();
                 var view = GameImpl.Instance.GraphicsDevice.Viewport;
                 inter.Init(view, new Size2(view.Width, view.Height) / Scale);
                 inter.OnOpen();
-            }
+            } else
+                Overlay.OnOpen();
         }
 
         public static void Update(GameTime time) {
             SetCursorType(CursorType.Default, 1F);
+
+            Overlay.Update(time);
             if (CurrentInterface != null)
                 CurrentInterface.Update(time);
         }
 
         public static void HandleMouse(MouseButton button, PressType type) {
+            if (Overlay.OnMouse(button, type))
+                return;
             if (CurrentInterface != null)
                 CurrentInterface.OnMouse(button, type);
         }
 
         public static void HandleKeyboard(string bind, PressType type) {
+            if (Overlay.OnKeyboard(bind, type))
+                return;
             if (CurrentInterface != null)
                 CurrentInterface.OnKeyboard(bind, type);
         }
 
-        public static void Draw(SpriteBatch batch, Viewport viewport) {
+        public static void Draw(SpriteBatch batch, Viewport viewport, Camera camera) {
+            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
+            Overlay.DrawPreviews(batch, camera);
+            batch.End();
+
             batch.Begin(
                 SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null,
                 Matrix.CreateScale(Scale));
