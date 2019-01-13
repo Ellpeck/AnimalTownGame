@@ -33,8 +33,7 @@ namespace AnimalTownGame.Interfaces {
                         var game = GameImpl.Instance;
                         var pos = game.Camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
                         if (!MapObject.IsCollidingPos(game.CurrentMap, pos, furniture.Type.PlacementBounds, null)) {
-                            var obj = new Furniture(furniture.Type, game.CurrentMap, pos, furniture.Type.CollisionBounds, furniture.Type.RenderBounds);
-                            obj.DepthOffset = furniture.Type.DepthOffset;
+                            var obj = new Furniture(furniture.Type, game.CurrentMap, pos);
                             game.CurrentMap.StaticObjects.Add(obj);
                             this.CursorItem = null;
                             return true;

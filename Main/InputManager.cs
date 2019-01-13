@@ -22,15 +22,21 @@ namespace AnimalTownGame.Main {
             AddKeybind(new Keybind("Right", Keys.D));
             AddKeybind(new Keybind("Slow", Keys.LeftShift));
             AddKeybind(new Keybind("Inventory", Keys.E, (oldType, newType) => {
-                if (newType == PressType.Pressed)
+                if (newType == PressType.Pressed) {
                     if (InterfaceManager.CurrentInterface == null)
                         InterfaceManager.SetInterface(new Inventory(GameImpl.Instance.Player));
                     else if (InterfaceManager.CurrentInterface is Inventory)
                         InterfaceManager.SetInterface(null);
+                    return true;
+                }
+                return false;
             }));
             AddKeybind(new Keybind("Escape", Keys.Escape, (oldType, newType) => {
-                if (newType == PressType.Pressed && InterfaceManager.CurrentInterface != null)
+                if (newType == PressType.Pressed && InterfaceManager.CurrentInterface != null) {
                     InterfaceManager.SetInterface(null);
+                    return true;
+                }
+                return false;
             }));
         }
 
@@ -53,14 +59,18 @@ namespace AnimalTownGame.Main {
                 if (button == ButtonState.Pressed) {
                     if (MousePressTypes[i] < PressType.Down)
                         MousePressTypes[i]++;
-                    InterfaceManager.HandleMouse((MouseButton) i, MousePressTypes[i]);
                 } else
                     MousePressTypes[i] = PressType.Nothing;
-            }
-            if (map != null && InterfaceManager.CurrentInterface == null) {
-                var pos = camera.ToWorldPos(mouse.Position.ToVector2());
-                MouseOverObjects(map.StaticObjects, pos);
-                MouseOverObjects(map.DynamicObjects, pos);
+
+                var mouseButton = (MouseButton) i;
+                var type = MousePressTypes[i];
+                if (!InterfaceManager.HandleMouse(mouseButton, type)) {
+                    if (map != null && InterfaceManager.CurrentInterface == null) {
+                        var pos = camera.ToWorldPos(mouse.Position.ToVector2());
+                        if (!HandleMouseObjects(map.StaticObjects, pos, mouseButton, type))
+                            HandleMouseObjects(map.DynamicObjects, pos, mouseButton, type);
+                    }
+                }
             }
 
             var keyboard = Keyboard.GetState();
@@ -69,27 +79,33 @@ namespace AnimalTownGame.Main {
                 if (keyboard.IsKeyDown(bind.Key)) {
                     if (bind.Type < PressType.Down)
                         newType = bind.Type + 1;
-                    InterfaceManager.HandleKeyboard(bind.Name, newType);
                 } else
                     newType = PressType.Nothing;
 
                 if (newType != bind.Type) {
-                    if (bind.OnChange != null)
-                        bind.OnChange(bind.Type, newType);
+                    var old = bind.Type;
                     bind.Type = newType;
+                    if (bind.OnChange != null)
+                        if (bind.OnChange(old, newType))
+                            continue;
                 }
+
+                InterfaceManager.HandleKeyboard(bind.Name, newType);
             }
         }
 
-        private static void MouseOverObjects(IEnumerable<MapObject> objects, Vector2 mousePos) {
-            foreach (var obj in objects) {
+        private static bool HandleMouseObjects(IReadOnlyList<MapObject> objects, Vector2 pos, MouseButton button, PressType type) {
+            for (var i = objects.Count - 1; i >= 0; i--) {
+                var obj = objects[i];
                 var bounds = obj.HighlightBounds;
                 if (bounds != RectangleF.Empty) {
                     bounds.Offset(obj.Position);
-                    if (bounds.Contains(mousePos))
-                        obj.OnMouseOver(mousePos);
+                    if (bounds.Contains(pos))
+                        if (obj.OnMouse(pos, button, type))
+                            return true;
                 }
             }
+            return false;
         }
 
     }
@@ -107,7 +123,7 @@ namespace AnimalTownGame.Main {
             this.OnChange = onChange;
         }
 
-        public delegate void OnTypeChange(PressType oldType, PressType newType);
+        public delegate bool OnTypeChange(PressType oldType, PressType newType);
 
     }
 

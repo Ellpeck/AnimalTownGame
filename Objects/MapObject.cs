@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
@@ -31,7 +32,8 @@ namespace AnimalTownGame.Objects {
             return Math.Max(0, (this.Position.Y + this.DepthOffset) / this.Map.HeightInTiles / 1000F);
         }
 
-        public virtual void OnMouseOver(Vector2 mousePos) {
+        public virtual bool OnMouse(Vector2 pos, MouseButton button, PressType type) {
+            return false;
         }
 
         public static bool IsCollidingPos(Map map, Vector2 pos, RectangleF collisionBounds, MapObject thisObj) {

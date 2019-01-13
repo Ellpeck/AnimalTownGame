@@ -43,11 +43,10 @@ namespace AnimalTownGame.Main {
                 CurrentInterface.Update(time);
         }
 
-        public static void HandleMouse(MouseButton button, PressType type) {
+        public static bool HandleMouse(MouseButton button, PressType type) {
             if (Overlay.OnMouse(button, type))
-                return;
-            if (CurrentInterface != null)
-                CurrentInterface.OnMouse(button, type);
+                return true;
+            return CurrentInterface != null && CurrentInterface.OnMouse(button, type);
         }
 
         public static void HandleKeyboard(string bind, PressType type) {
