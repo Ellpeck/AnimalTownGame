@@ -42,8 +42,8 @@ namespace AnimalTownGame.Main {
             return Keybinds[name].Type;
         }
 
-        public static PressType GetMouseType(int index) {
-            return MousePressTypes[index];
+        public static PressType GetMouseType(MouseButton button) {
+            return MousePressTypes[(int) button];
         }
 
         public static void Update(Map map, Camera camera) {
@@ -53,6 +53,7 @@ namespace AnimalTownGame.Main {
                 if (button == ButtonState.Pressed) {
                     if (MousePressTypes[i] < PressType.Down)
                         MousePressTypes[i]++;
+                    InterfaceManager.HandleMouse((MouseButton) i, MousePressTypes[i]);
                 } else
                     MousePressTypes[i] = PressType.Nothing;
             }
@@ -68,6 +69,7 @@ namespace AnimalTownGame.Main {
                 if (keyboard.IsKeyDown(bind.Key)) {
                     if (bind.Type < PressType.Down)
                         newType = bind.Type + 1;
+                    InterfaceManager.HandleKeyboard(bind.Name, newType);
                 } else
                     newType = PressType.Nothing;
 
@@ -117,11 +119,10 @@ namespace AnimalTownGame.Main {
 
     }
 
-    public enum CursorType {
+    public enum MouseButton {
 
-        Default,
-        Door,
-        Dialog
+        Left,
+        Right
 
     }
 }

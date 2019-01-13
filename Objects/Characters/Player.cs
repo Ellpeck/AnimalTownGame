@@ -12,9 +12,11 @@ namespace AnimalTownGame.Objects.Characters {
         public Player(Map map, Vector2 position) : base("Player", map, position) {
             this.WalkSpeed = 0.03F;
 
+            this.Inventory[0] = Registry.ItemWhiteLamp.Instance();
+            this.Inventory[1] = Registry.ItemWhiteLamp.Instance();
+            this.Inventory[2] = Registry.ItemWhiteLamp.Instance();
+            this.Inventory[3] = Registry.ItemWhiteLamp.Instance();
             this.Inventory[4] = Registry.ItemWhiteLamp.Instance();
-            this.Inventory[7] = Registry.ItemWhiteLamp.Instance();
-            this.Inventory[22] = Registry.ItemWhiteLamp.Instance();
         }
 
         public override void Update(GameTime gameTime, bool isCurrent) {

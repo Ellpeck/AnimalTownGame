@@ -19,6 +19,6 @@ namespace AnimalTownGame.Main {
         public static readonly TileType TileWallTrim = new WallTrimType(new Point(1, 0), TextureInside).SetWalkability(int.MaxValue);
         public static readonly TileType TileWall = new TileType(new Point(0, 1), TextureInside).SetWalkability(int.MaxValue);
 
-        public static readonly ItemType ItemWhiteLamp = new FurnitureType();
+        public static readonly ItemType ItemWhiteLamp = new FurnitureType("White Lamp");
     }
 }

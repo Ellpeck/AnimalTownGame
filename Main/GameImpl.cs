@@ -83,7 +83,7 @@ namespace AnimalTownGame.Main {
             } else
                 this.GraphicsDevice.Clear(Color.Black);
 
-            InterfaceManager.Draw(this.SpriteBatch);
+            InterfaceManager.Draw(this.SpriteBatch, view);
             CutsceneManager.Draw(this.SpriteBatch, view);
         }
 

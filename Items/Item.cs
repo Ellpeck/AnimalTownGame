@@ -12,7 +12,7 @@ namespace AnimalTownGame.Items {
             this.Type = type;
         }
 
-        public virtual void Draw(SpriteBatch batch, Vector2 position) {
+        public virtual void Draw(SpriteBatch batch, Vector2 position, float scale) {
             var atlas = Registry.TextureItems;
             var texCoord = this.Type.TextureCoord;
             batch.Draw(
@@ -22,14 +22,20 @@ namespace AnimalTownGame.Items {
                 Color.White);
         }
 
+        public virtual string GetName() {
+            return this.Type.Name;
+        }
+
     }
 
     public class ItemType {
 
         public readonly Point TextureCoord;
+        public readonly string Name;
 
-        public ItemType(Point textureCoord) {
+        public ItemType(string name, Point textureCoord) {
             this.TextureCoord = textureCoord;
+            this.Name = name;
         }
 
         public virtual Item Instance() {

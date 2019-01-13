@@ -14,10 +14,11 @@ namespace AnimalTownGame.Interfaces {
 
         public Overlay() {
             var view = GameImpl.Instance.GraphicsDevice.Viewport;
-            this.InitPositions(view, new Size2(view.Width, view.Height) / InterfaceManager.Scale);
+            this.Init(view, new Size2(view.Width, view.Height) / InterfaceManager.Scale);
         }
 
         public override void Draw(SpriteBatch batch) {
+            base.Draw(batch);
             batch.Draw(Texture, this.position, Color.White);
             batch.DrawCenteredString(InterfaceManager.NormalFont,
                 GameImpl.CurrentTime.ToString("h:mm tt"),
@@ -27,7 +28,8 @@ namespace AnimalTownGame.Interfaces {
                 this.position + this.dateOffset, true, true, Color.White, 0.15F);
         }
 
-        public override void InitPositions(Viewport viewport, Size2 viewportSize) {
+        public override void Init(Viewport viewport, Size2 viewportSize) {
+            base.Init(viewport, viewportSize);
             this.position = new Vector2(2, 0);
             this.timeOffset = new Vector2(24, 12);
             this.dateOffset = new Vector2(24, 25.5F);

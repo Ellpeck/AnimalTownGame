@@ -10,7 +10,7 @@ namespace AnimalTownGame.Items {
 
     public class FurnitureType : ItemType {
 
-        public FurnitureType() : base(new Point(0, 0)) {
+        public FurnitureType(string name) : base(name, new Point(0, 0)) {
         }
 
         public override Item Instance() {
