@@ -69,6 +69,7 @@
     <Compile Include="Main\GameImpl.cs" />
     <Compile Include="Main\InputManager.cs" />
     <Compile Include="Main\InterfaceManager.cs" />
+    <Compile Include="Main\Locale.cs" />
     <Compile Include="Main\Registry.cs" />
     <Compile Include="Main\SaveManager.cs" />
     <Compile Include="Main\Startup.cs" />
@@ -107,6 +108,8 @@
     <Content Include="Content\Interfaces\NormalFont.spritefont" />
     <Content Include="Content\Interfaces\Overlay.png" />
     <Content Include="Content\Items\Icons.png" />
+    <Content Include="Content\Locale\en-US\Interface.xml" />
+    <Content Include="Content\Locale\en-US\Items.xml" />
     <Content Include="Content\Objects\Furniture\MarbleCounter.png" />
     <Content Include="Content\Objects\Furniture\MarbleCounterSink.png" />
     <Content Include="Content\Objects\Furniture\RedRug.png" />

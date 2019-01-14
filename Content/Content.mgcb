@@ -217,3 +217,13 @@
 /processorParam:TextureFormat=Color
 /build:Items/Icons.png
 
+#begin Locale/en-US/Interface.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Locale/en-US/Interface.xml
+
+#begin Locale/en-US/Items.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Locale/en-US/Items.xml
+

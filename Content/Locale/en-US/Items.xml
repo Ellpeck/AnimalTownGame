@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+    <Asset Type="System.Collections.Generic.Dictionary[System.String, System.String]">
+        <Item>
+            <Key>WhiteLamp</Key>
+            <Value>White Lamp</Value>
+        </Item>
+        <Item>
+            <Key>RedRug</Key>
+            <Value>Red Rug</Value>
+        </Item>
+        <Item>
+            <Key>WoodDiningTable</Key>
+            <Value>Wooden Dining Table</Value>
+        </Item>
+        <Item>
+            <Key>MarbleCounter</Key>
+            <Value>Marble Counter</Value>
+        </Item>
+        <Item>
+            <Key>MarbleCounterSink</Key>
+            <Value>Marble Counter with Sink</Value>
+        </Item>
+        <Item>
+            <Key>Stove</Key>
+            <Value>Stove</Value>
+        </Item>
+    </Asset>
+</XnaContent>

@@ -25,7 +25,7 @@ namespace AnimalTownGame.Items {
         }
 
         public virtual string GetDisplayName() {
-            return this.Type.DisplayName;
+            return Locale.GetItem(this.Type.Name);
         }
 
         public virtual IEnumerable<InterfaceComponent> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
@@ -38,12 +38,10 @@ namespace AnimalTownGame.Items {
 
         public readonly Point TextureCoord;
         public readonly string Name;
-        public readonly string DisplayName;
 
-        public ItemType(string name, string displayName, Point textureCoord) {
+        public ItemType(string name, Point textureCoord) {
             this.TextureCoord = textureCoord;
             this.Name = name;
-            this.DisplayName = displayName;
             Registry.ItemTypes[name] = this;
         }
 

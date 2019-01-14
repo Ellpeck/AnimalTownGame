@@ -18,7 +18,7 @@ namespace AnimalTownGame.Items {
             var map = GameImpl.Instance.CurrentMap;
             if (map != null && map.CanHaveFurniture)
                 yield return new ComponentButton(menu,
-                    new RectangleF(menu.Bounds.Position + new Vector2(1, 1), new Size2(menu.Bounds.Width - 2, 6)), "Place",
+                    new RectangleF(menu.Bounds.Position + new Vector2(1, 1), new Size2(menu.Bounds.Width - 2, 6)), Locale.GetInterface("Place"),
                     (button, pressType) => {
                         if (button == MouseButton.Left && pressType == PressType.Pressed) {
                             InterfaceManager.Overlay.CursorItem = this;
@@ -49,8 +49,8 @@ namespace AnimalTownGame.Items {
         public readonly RectangleF PlacementBounds;
         public float DepthOffset;
 
-        public FurnitureType(string name, string displayName, RectangleF renderBounds, RectangleF collisionBounds, RectangleF? placementBounds = null)
-            : base(name,displayName, new Point(0, 0)) {
+        public FurnitureType(string name, RectangleF renderBounds, RectangleF collisionBounds, RectangleF? placementBounds = null)
+            : base(name, new Point(0, 0)) {
             this.Texture = GameImpl.LoadContent<Texture2D>("Objects/Furniture/" + name);
             this.RenderBounds = renderBounds;
             this.CollisionBounds = collisionBounds;

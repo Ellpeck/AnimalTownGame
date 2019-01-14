@@ -47,10 +47,10 @@ namespace AnimalTownGame.Interfaces {
         public override void Draw(SpriteBatch batch) {
             batch.Draw(Texture, this.position, Color.White);
             batch.DrawCenteredString(InterfaceManager.NormalFont,
-                GameImpl.CurrentTime.ToString("h:mm tt"),
+                GameImpl.CurrentTime.ToString(Locale.GetInterface("TimeHour")),
                 this.position + this.timeOffset, true, true, Color.White, 0.325F);
             batch.DrawCenteredString(InterfaceManager.NormalFont,
-                GameImpl.CurrentTime.ToString("dddd d MMM"),
+                GameImpl.CurrentTime.ToString(Locale.GetInterface("TimeDay")),
                 this.position + this.dateOffset, true, true, Color.White, 0.15F);
             base.Draw(batch);
         }
