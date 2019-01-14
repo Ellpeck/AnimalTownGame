@@ -23,17 +23,19 @@ namespace AnimalTownGame.Objects.Static {
         }
 
         public override bool OnMouse(Vector2 pos, MouseButton button, PressType type) {
-            var game = GameImpl.Instance;
-            var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position + new Vector2(2.5F, 0)) <= 2 * 2;
-            InterfaceManager.SetCursorType(CursorType.Door, closeEnough ? 1F : 0.5F);
-            if (closeEnough && button == MouseButton.Left && type == PressType.Pressed) {
-                CutsceneManager.Fade(0.03F, () => {
-                    var map = game.Maps[this.destination];
-                    game.Player.Teleport(map, map.EntryPoint);
-                    game.Player.StopAndFace(Direction.Up);
-                    CutsceneManager.Fade(-0.03F);
-                });
-                return true;
+            if (button == MouseButton.Left) {
+                var game = GameImpl.Instance;
+                var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position + new Vector2(2.5F, 0)) <= 2 * 2;
+                InterfaceManager.SetCursorType(CursorType.Door, closeEnough ? 1F : 0.5F);
+                if (closeEnough && type == PressType.Pressed) {
+                    CutsceneManager.Fade(0.03F, () => {
+                        var map = game.Maps[this.destination];
+                        game.Player.Teleport(map, map.EntryPoint);
+                        game.Player.StopAndFace(Direction.Up);
+                        CutsceneManager.Fade(-0.03F);
+                    });
+                    return true;
+                }
             }
             return false;
         }

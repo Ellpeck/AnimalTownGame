@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 namespace AnimalTownGame.Maps {
     public static class MapGenerator {
 
-        public static Map GenerateTown() {
-            var rand = new Random();
-            var map = new Map("Town", 64, 64, false);
+        public static Map GenerateTown(int seed) {
+            var rand = new Random(seed);
+            var map = new Map("Town", 64, 64, false, false);
 
             // Initial grass
             for (var x = 0; x < map.WidthInTiles; x++)
@@ -20,7 +20,7 @@ namespace AnimalTownGame.Maps {
         }
 
         public static Map GenerateHouse(string name, Point townPosition) {
-            var map = new Map(name, 11, 13, true, new Vector2(5.5F, 11.5F));
+            var map = new Map(name, 11, 13, true, true, new Vector2(5.5F, 11.5F));
 
             for (var x = 0; x < map.WidthInTiles; x++)
                 for (var y = 0; y < map.HeightInTiles; y++) {

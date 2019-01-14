@@ -12,6 +12,7 @@ namespace AnimalTownGame.Maps {
         public readonly int WidthInTiles;
         public readonly int HeightInTiles;
         public readonly bool IsInside;
+        public readonly bool CanHaveFurniture;
         public readonly Vector2 EntryPoint;
         private readonly Tile[,] tileGrid;
 
@@ -25,11 +26,12 @@ namespace AnimalTownGame.Maps {
         public readonly Random Random = new Random();
         public int Ticks { get; private set; }
 
-        public Map(string name, int widthInTiles, int heightInTiles, bool isInside, Vector2 entryPoint  = default(Vector2)) {
+        public Map(string name, int widthInTiles, int heightInTiles, bool isInside, bool canHaveFurniture, Vector2 entryPoint = default(Vector2)) {
             this.Name = name;
             this.WidthInTiles = widthInTiles;
             this.HeightInTiles = heightInTiles;
             this.IsInside = isInside;
+            this.CanHaveFurniture = canHaveFurniture;
             this.EntryPoint = entryPoint;
             this.tileGrid = new Tile[widthInTiles, heightInTiles];
         }
@@ -63,6 +65,10 @@ namespace AnimalTownGame.Maps {
 
         public bool IsInBounds(int x, int y) {
             return x >= 0 && y >= 0 && x < this.WidthInTiles && y < this.HeightInTiles;
+        }
+
+        public class SaveInfo {
+
         }
 
     }

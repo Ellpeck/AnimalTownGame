@@ -70,6 +70,7 @@
     <Compile Include="Main\InputManager.cs" />
     <Compile Include="Main\InterfaceManager.cs" />
     <Compile Include="Main\Registry.cs" />
+    <Compile Include="Main\SaveManager.cs" />
     <Compile Include="Main\Startup.cs" />
     <Compile Include="Maps\AutoTextureTile.cs" />
     <Compile Include="Maps\Map.cs" />

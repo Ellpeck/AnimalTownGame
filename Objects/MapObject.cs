@@ -79,6 +79,5 @@ namespace AnimalTownGame.Objects {
             }
             return false;
         }
-
     }
 }
