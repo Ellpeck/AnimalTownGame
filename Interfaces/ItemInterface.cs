@@ -18,7 +18,7 @@ namespace AnimalTownGame.Interfaces {
         public override void Draw(SpriteBatch batch) {
             base.Draw(batch);
             if (this.CursorItem != null)
-                this.CursorItem.Draw(batch, MousePos + Vector2.One, 0.75F);
+                this.CursorItem.Draw(batch, MousePos + Vector2.One * 1.5F, 0.75F, 0, true);
         }
 
         public override void OnClose() {

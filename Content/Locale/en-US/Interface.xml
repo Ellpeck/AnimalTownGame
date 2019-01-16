@@ -6,6 +6,10 @@
             <Value>Place</Value>
         </Item>
         <Item>
+            <Key>Drop</Key>
+            <Value>Drop</Value>
+        </Item>
+        <Item>
             <Key>TimeHour</Key>
             <Value>h:mm tt</Value>
         </Item>

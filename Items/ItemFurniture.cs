@@ -14,11 +14,13 @@ namespace AnimalTownGame.Items {
             this.Type = type;
         }
 
-        public override IEnumerable<InterfaceComponent> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
+        public override IEnumerable<ComponentButton> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
+            foreach (var comp in base.GetContextMenu(slot, menu))
+                yield return comp;
             var map = GameImpl.Instance.CurrentMap;
             if (map != null && map.CanHaveFurniture)
                 yield return new ComponentButton(menu,
-                    new RectangleF(menu.Bounds.Position + new Vector2(1, 1), new Size2(menu.Bounds.Width - 2, 6)), Locale.GetInterface("Place"),
+                    new RectangleF(Vector2.Zero, new Size2(menu.Bounds.Width - 2, 6)), Locale.GetInterface("Place"),
                     (button, pressType) => {
                         if (button == MouseButton.Left && pressType == PressType.Pressed) {
                             InterfaceManager.Overlay.CursorItem = this;

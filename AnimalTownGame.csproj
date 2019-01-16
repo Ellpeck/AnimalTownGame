@@ -85,6 +85,7 @@
     <Compile Include="Objects\Characters\Player.cs" />
     <Compile Include="Objects\Characters\Villager.cs" />
     <Compile Include="Objects\DynamicObject.cs" />
+    <Compile Include="Objects\ItemObject.cs" />
     <Compile Include="Objects\MapObject.cs" />
     <Compile Include="Objects\Static\Furniture.cs" />
     <Compile Include="Objects\Static\Teleporter.cs" />

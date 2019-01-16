@@ -32,9 +32,9 @@ namespace AnimalTownGame.Interfaces {
                     if (furniture != null) {
                         var game = GameImpl.Instance;
                         var pos = game.Camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
-                        if (!MapObject.IsCollidingPos(game.CurrentMap, pos, furniture.Type.PlacementBounds, null)) {
+                        if (!MapObject.IsCollidingPos(game.CurrentMap, pos, furniture.Type.PlacementBounds)) {
                             var obj = new Furniture(furniture.Type, game.CurrentMap, pos);
-                            game.CurrentMap.StaticObjects.Add(obj);
+                            game.CurrentMap.AddObject(obj);
                             this.CursorItem = null;
                             return true;
                         }
@@ -60,7 +60,7 @@ namespace AnimalTownGame.Interfaces {
             if (furniture != null) {
                 var map = GameImpl.Instance.CurrentMap;
                 var pos = camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
-                var color = MapObject.IsCollidingPos(map, pos, furniture.Type.PlacementBounds, null) ? Color.Red : Color.White;
+                var color = MapObject.IsCollidingPos(map, pos, furniture.Type.PlacementBounds) ? Color.Red : Color.White;
                 furniture.DrawPreview(batch, pos, new Color(color, 0.25F), true);
             }
         }

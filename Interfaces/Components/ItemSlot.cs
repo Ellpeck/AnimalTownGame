@@ -53,7 +53,7 @@ namespace AnimalTownGame.Interfaces.Components {
         public override void Draw(SpriteBatch batch) {
             var item = this.Items[this.Index];
             if (item != null)
-                item.Draw(batch, this.Position, 1F);
+                item.Draw(batch, this.Position, 1F, 0, true);
             base.Draw(batch);
         }
 

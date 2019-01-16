@@ -9,18 +9,18 @@ namespace AnimalTownGame.Interfaces.Components {
 
         private readonly string text;
         private readonly OnPress callback;
-        private readonly RectangleF bounds;
+        public RectangleF Bounds;
 
         public ComponentButton(Interface iface, RectangleF bounds, string text, OnPress callback) : base(iface) {
             this.text = text;
             this.callback = callback;
-            this.bounds = bounds;
+            this.Bounds = bounds;
         }
 
         public override void Draw(SpriteBatch batch) {
             var color = this.IsMousedComponent() ? Color.Yellow : Color.White;
             batch.DrawCenteredString(InterfaceManager.NormalFont, this.text,
-                this.bounds.Position + (Vector2) this.bounds.Size / 2, true, true, color, 0.15F);
+                this.Bounds.Position + (Vector2) this.Bounds.Size / 2, true, true, color, 0.15F);
             base.Draw(batch);
         }
 
@@ -29,7 +29,7 @@ namespace AnimalTownGame.Interfaces.Components {
         }
 
         public override bool IsMouseOver() {
-            return this.bounds.Contains(MousePos);
+            return this.Bounds.Contains(MousePos);
         }
 
         public delegate bool OnPress(MouseButton button, PressType type);

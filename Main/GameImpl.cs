@@ -48,11 +48,11 @@ namespace AnimalTownGame.Main {
             var town = this.AddMap(MapGenerator.GenerateTown(this.MapSeed, data == null));
 
             var villager = new Villager("Player", town, new Vector2(35.5F, 32.5F));
-            town.DynamicObjects.Add(villager);
+            town.AddObject(villager);
 
             var houseMap = this.AddMap(MapGenerator.GenerateHouse("House1", new Point(20, 20)));
             var house = new VillagerHouse(0, town, new Vector2(20, 20), houseMap.Name);
-            town.StaticObjects.Add(house);
+            town.AddObject(house);
 
             if (data != null) {
                 foreach (var map in data.Maps)
@@ -63,7 +63,7 @@ namespace AnimalTownGame.Main {
                 this.ForceRealTimeUpdate();
             } else {
                 this.Player = new Player(town, new Vector2(22.5F, 22.5F));
-                town.DynamicObjects.Add(this.Player);
+                town.AddObject(this.Player);
             }
 
             this.Camera = new Camera(this.Player);

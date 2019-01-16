@@ -1,6 +1,7 @@
 using AnimalTownGame.Items;
 using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
+using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
@@ -29,16 +30,12 @@ namespace AnimalTownGame.Objects.Static {
         }
 
         public bool IsCovered() {
-            var myBounds = this.Type.PlacementBounds;
-            myBounds.Offset(this.Position);
+            var myBounds = this.Type.PlacementBounds.Move(this.Position);
             foreach (var obj in this.Map.StaticObjects) {
                 if (obj == this)
                     continue;
-                var bounds = obj.CollisionBounds;
-                if (bounds == RectangleF.Empty)
-                    continue;
-                bounds.Offset(obj.Position);
-                if (myBounds.Intersects(bounds))
+                var bounds = obj.CollisionBounds.Move(obj.Position);
+                if (myBounds.IntersectsNonEmpty(bounds))
                     return true;
             }
             return false;

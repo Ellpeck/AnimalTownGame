@@ -51,16 +51,13 @@ namespace AnimalTownGame.Objects.Characters {
                 this.CurrentAnimation.Update(gameTime);
             }
 
-            var myBounds = this.CollisionBounds;
-            if (myBounds != RectangleF.Empty) {
-                myBounds.Offset(this.Position);
+            var myBounds = this.CollisionBounds.Move(this.Position);
+            if (myBounds != RectangleF.Empty)
                 foreach (var obj in this.Map.StaticObjects) {
-                    var bounds = obj.IntersectionBounds;
-                    bounds.Offset(obj.Position);
-                    if (myBounds.Intersects(bounds))
+                    var bounds = obj.IntersectionBounds.Move(obj.Position);
+                    if (myBounds.IntersectsNonEmpty(bounds))
                         obj.OnIntersectWith(this);
                 }
-            }
         }
 
         public virtual bool ShouldTurn() {

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AnimalTownGame.Misc;
 using AnimalTownGame.Objects;
 using AnimalTownGame.Objects.Static;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 
 namespace AnimalTownGame.Maps {
     public class Map {
@@ -18,6 +20,7 @@ namespace AnimalTownGame.Maps {
 
         public readonly List<DynamicObject> DynamicObjects = new List<DynamicObject>();
         public readonly List<StaticObject> StaticObjects = new List<StaticObject>();
+        public IEnumerable<MapObject> AllObjects => this.DynamicObjects.Concat<MapObject>(this.StaticObjects);
 
         public Tile this[Point point] => this[point.X, point.Y];
 
@@ -36,10 +39,16 @@ namespace AnimalTownGame.Maps {
             this.tileGrid = new Tile[widthInTiles, heightInTiles];
         }
 
+        public void AddObject(MapObject obj) {
+            var stat = obj as StaticObject;
+            if (stat != null)
+                this.StaticObjects.Add(stat);
+            else
+                this.DynamicObjects.Add((DynamicObject) obj);
+        }
+
         public virtual void UpdateRealTime(DateTime now, DateTime lastUpdate, TimeSpan passed) {
-            foreach (var obj in this.DynamicObjects)
-                obj.UpdateRealTime(now, lastUpdate, passed);
-            foreach (var obj in this.StaticObjects)
+            foreach (var obj in this.AllObjects)
                 obj.UpdateRealTime(now, lastUpdate, passed);
         }
 
@@ -56,7 +65,7 @@ namespace AnimalTownGame.Maps {
 
             this.tileGrid[point.X, point.Y] = type.Instance(this, point);
 
-            foreach (var dir in Direction.Values) {
+            foreach (var dir in Direction.Arounds) {
                 var tile = this[point + dir.Offset];
                 if (tile != null)
                     tile.OnNeighborChanged(point);
@@ -67,9 +76,30 @@ namespace AnimalTownGame.Maps {
             return x >= 0 && y >= 0 && x < this.WidthInTiles && y < this.HeightInTiles;
         }
 
-        public class SaveInfo {
-
+        public IEnumerable<MapObject> GetObjectsInArea(RectangleF area, BoundSelector boundSelector, ObjectSelector objSelector = null) {
+            foreach (var obj in this.AllObjects) {
+                if (objSelector != null && !objSelector(obj))
+                    continue;
+                var bound = boundSelector(obj).Move(obj.Position);
+                if (area.IntersectsNonEmpty(bound))
+                    yield return obj;
+            }
         }
+
+        public IEnumerable<Tile> GetTilesInArea(RectangleF area, TileSelector selector = null) {
+            for (var x = 0; x <= area.Width.Ceil(); x++)
+                for (var y = 0; y <= area.Height.Ceil(); y++) {
+                    var tile = this[area.X.Floor() + x, area.Y.Floor() + y];
+                    if (tile != null && (selector == null || selector(tile)))
+                        yield return tile;
+                }
+        }
+
+        public delegate bool ObjectSelector(MapObject obj);
+
+        public delegate bool TileSelector(Tile tile);
+
+        public delegate RectangleF BoundSelector(MapObject obj);
 
     }
 }

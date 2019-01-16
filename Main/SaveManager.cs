@@ -4,12 +4,14 @@ using System.IO;
 using System.Xml.Serialization;
 using AnimalTownGame.Items;
 using AnimalTownGame.Maps;
+using AnimalTownGame.Objects;
 using AnimalTownGame.Objects.Characters;
 using AnimalTownGame.Objects.Static;
 using Microsoft.Xna.Framework;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
 
 namespace AnimalTownGame.Main {
     public static class SaveManager {
@@ -92,7 +94,7 @@ namespace AnimalTownGame.Main {
                 else
                     player.Inventory[i] = Registry.ItemTypes[item].Instance();
             }
-            player.Map.DynamicObjects.Add(player);
+            player.Map.AddObject(player);
             return player;
         }
 
@@ -102,21 +104,15 @@ namespace AnimalTownGame.Main {
     public class MapInfo {
 
         public string Name;
-        public List<StaticObjectInfo> StaticObjects;
+        public List<MapObjectInfo> Objects;
 
         public MapInfo(Map map) {
             this.Name = map.Name;
-            this.StaticObjects = new List<StaticObjectInfo>();
-            foreach (var obj in map.StaticObjects) {
-                var furniture = obj as Furniture;
-                if (furniture != null) {
-                    this.StaticObjects.Add(new FurnitureInfo(furniture));
-                    continue;
-                }
-                var tree = obj as FruitTree;
-                if (tree != null) {
-                    this.StaticObjects.Add(new FruitTreeInfo(tree));
-                }
+            this.Objects = new List<MapObjectInfo>();
+            foreach (var obj in map.AllObjects) {
+                var info = Convert(obj);
+                if (info != null)
+                    this.Objects.Add(info);
             }
         }
 
@@ -125,8 +121,22 @@ namespace AnimalTownGame.Main {
 
         public void Load(Dictionary<string, Map> maps) {
             var map = maps[this.Name];
-            foreach (var obj in this.StaticObjects)
-                map.StaticObjects.Add(obj.Load(map));
+            foreach (var info in this.Objects) {
+                map.AddObject(info.Load(map));
+            }
+        }
+
+        private static MapObjectInfo Convert(MapObject obj) {
+            var furniture = obj as Furniture;
+            if (furniture != null)
+                return new FurnitureInfo(furniture);
+            var tree = obj as FruitTree;
+            if (tree != null)
+                return new FruitTreeInfo(tree);
+            var item = obj as ItemObject;
+            if (item != null)
+                return new ItemObjectInfo(item);
+            return null;
         }
 
     }
@@ -134,23 +144,24 @@ namespace AnimalTownGame.Main {
     [Serializable]
     [XmlInclude(typeof(FurnitureInfo))]
     [XmlInclude(typeof(FruitTreeInfo))]
-    public abstract class StaticObjectInfo {
+    [XmlInclude(typeof(ItemObjectInfo))]
+    public abstract class MapObjectInfo {
 
         public Vector2 Position;
 
-        public StaticObjectInfo(Vector2 position) {
+        public MapObjectInfo(Vector2 position) {
             this.Position = position;
         }
 
-        public StaticObjectInfo() {
+        public MapObjectInfo() {
         }
 
-        public abstract StaticObject Load(Map map);
+        public abstract MapObject Load(Map map);
 
     }
 
     [Serializable]
-    public class FurnitureInfo : StaticObjectInfo {
+    public class FurnitureInfo : MapObjectInfo {
 
         public string Type;
 
@@ -161,7 +172,7 @@ namespace AnimalTownGame.Main {
         public FurnitureInfo() {
         }
 
-        public override StaticObject Load(Map map) {
+        public override MapObject Load(Map map) {
             var type = (FurnitureType) Registry.ItemTypes[this.Type];
             return new Furniture(type, map, this.Position);
         }
@@ -169,7 +180,7 @@ namespace AnimalTownGame.Main {
     }
 
     [Serializable]
-    public class FruitTreeInfo : StaticObjectInfo {
+    public class FruitTreeInfo : MapObjectInfo {
 
         public string Type;
         public long FruitTime;
@@ -182,7 +193,7 @@ namespace AnimalTownGame.Main {
         public FruitTreeInfo() {
         }
 
-        public override StaticObject Load(Map map) {
+        public override MapObject Load(Map map) {
             foreach (var type in FruitTree.Types)
                 if (type.Name == this.Type) {
                     return new FruitTree(type, map, this.Position) {
@@ -190,6 +201,25 @@ namespace AnimalTownGame.Main {
                     };
                 }
             return null;
+        }
+
+    }
+
+    [Serializable]
+    public class ItemObjectInfo : MapObjectInfo {
+
+        public string Type;
+
+        public ItemObjectInfo(ItemObject item) : base(item.Position) {
+            this.Type = item.Item.Type.Name;
+        }
+
+        public ItemObjectInfo() {
+        }
+
+        public override MapObject Load(Map map) {
+            var item = Registry.ItemTypes[this.Type].Instance();
+            return new ItemObject(item, map, this.Position);
         }
 
     }

@@ -16,7 +16,12 @@ namespace AnimalTownGame.Interfaces.Components {
 
             var item = slot.Items[slot.Index];
             if (item != null) {
-                this.Components.AddRange(item.GetContextMenu(this.Slot, this));
+                var yOffset = 1F;
+                foreach (var comp in item.GetContextMenu(this.Slot, this)) {
+                    comp.Bounds.Position = this.Bounds.Position + new Vector2(1, yOffset);
+                    this.Components.Add(comp);
+                    yOffset += comp.Bounds.Height + 1;
+                }
             }
         }
 

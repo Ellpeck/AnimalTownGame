@@ -70,7 +70,7 @@ namespace AnimalTownGame.Misc {
         private static int GetCost(Map map, Point point, RectangleF collisionBounds) {
             if (!map.IsInBounds(point.X, point.Y))
                 return int.MaxValue;
-            if (MapObject.IsCollidingPos(map, point.ToVector2(), collisionBounds, null))
+            if (MapObject.IsCollidingPos(map, point.ToVector2(), collisionBounds))
                 return int.MaxValue;
             var tile = map[point];
             return tile != null ? tile.Type.Walkability : DefaultPathfindCost;

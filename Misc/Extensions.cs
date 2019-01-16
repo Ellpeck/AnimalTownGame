@@ -32,5 +32,18 @@ namespace AnimalTownGame.Misc {
             batch.DrawString(spriteFont, text, position + Vector2.One, Color.White, 0F, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
 
+        public static RectangleF Move(this RectangleF rect, Vector2 position) {
+            if (rect == RectangleF.Empty)
+                return rect;
+            rect.Offset(position);
+            return rect;
+        }
+
+        public static bool IntersectsNonEmpty(this RectangleF rect, RectangleF other) {
+            if (rect == RectangleF.Empty || other == RectangleF.Empty)
+                return false;
+            return rect.Intersects(other);
+        }
+
     }
 }

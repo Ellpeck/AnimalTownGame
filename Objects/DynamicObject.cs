@@ -31,13 +31,13 @@ namespace AnimalTownGame.Objects {
         }
 
         public bool IsCollidingPos(Vector2 pos) {
-            return IsCollidingPos(this.Map, pos, this.CollisionBounds, this);
+            return IsCollidingPos(this.Map, pos, this.CollisionBounds, null, this);
         }
 
         public virtual void Teleport(Map newMap, Vector2 pos) {
             this.Map.DynamicObjects.Remove(this);
             this.Map = newMap;
-            this.Map.DynamicObjects.Add(this);
+            this.Map.AddObject(this);
             this.Position = pos;
         }
 

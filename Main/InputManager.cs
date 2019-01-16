@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AnimalTownGame.Interfaces;
 using AnimalTownGame.Maps;
+using AnimalTownGame.Misc;
 using AnimalTownGame.Objects;
 using AnimalTownGame.Rendering;
 using Microsoft.Xna.Framework;
@@ -47,6 +48,13 @@ namespace AnimalTownGame.Main {
                 }
                 return false;
             }));
+            AddKeybind(new Keybind("Debug", Keys.F2, (oldType, newType) => {
+                if (newType == PressType.Pressed) {
+                    MapRenderer.DisplayBounds = !MapRenderer.DisplayBounds;
+                    return true;
+                }
+                return false;
+            }));
         }
 
         public static void AddKeybind(Keybind bind) {
@@ -76,8 +84,12 @@ namespace AnimalTownGame.Main {
                 if (!InterfaceManager.HandleMouse(mouseButton, type)) {
                     if (map != null && InterfaceManager.CurrentInterface == null) {
                         var pos = camera.ToWorldPos(mouse.Position.ToVector2());
-                        if (!HandleMouseObjects(map.StaticObjects, pos, mouseButton, type))
-                            HandleMouseObjects(map.DynamicObjects, pos, mouseButton, type);
+                        foreach (var obj in map.AllObjects) {
+                            var bounds = obj.HighlightBounds.Move(obj.Position);
+                            if (bounds != RectangleF.Empty && bounds.Contains(pos))
+                                if (obj.OnMouse(pos, mouseButton, type))
+                                    break;
+                        }
                     }
                 }
             }
@@ -101,20 +113,6 @@ namespace AnimalTownGame.Main {
 
                 InterfaceManager.HandleKeyboard(bind.Name, newType);
             }
-        }
-
-        private static bool HandleMouseObjects(IReadOnlyList<MapObject> objects, Vector2 pos, MouseButton button, PressType type) {
-            for (var i = objects.Count - 1; i >= 0; i--) {
-                var obj = objects[i];
-                var bounds = obj.HighlightBounds;
-                if (bounds != RectangleF.Empty) {
-                    bounds.Offset(obj.Position);
-                    if (bounds.Contains(pos))
-                        if (obj.OnMouse(pos, button, type))
-                            return true;
-                }
-            }
-            return false;
         }
 
     }

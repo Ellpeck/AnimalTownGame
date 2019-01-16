@@ -20,7 +20,7 @@ namespace AnimalTownGame.Maps {
                 // Trees
                 for (var i = 0; i < 20; i++) {
                     var pos = new Vector2(rand.Next(map.WidthInTiles - 10) + 5, rand.Next(map.HeightInTiles - 10) + 5) + Vector2.One * 0.5F;
-                    map.StaticObjects.Add(new FruitTree(FruitTree.Types[0], map, pos));
+                    map.AddObject(new FruitTree(FruitTree.Types[0], map, pos));
                 }
             }
 
@@ -40,7 +40,7 @@ namespace AnimalTownGame.Maps {
                     map.SetTile(new Point(x, y), tile);
                 }
 
-            map.StaticObjects.Add(new Teleporter(map, new Vector2(5, 12.75F), "Town", townPosition.ToVector2() + new Vector2(2.5F, 1.15F), Direction.Down));
+            map.AddObject(new Teleporter(map, new Vector2(5, 12.75F), "Town", townPosition.ToVector2() + new Vector2(2.5F, 1.15F), Direction.Down));
             return map;
         }
 
