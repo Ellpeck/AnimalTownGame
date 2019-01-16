@@ -87,9 +87,9 @@ namespace AnimalTownGame.Maps {
         }
 
         public IEnumerable<Tile> GetTilesInArea(RectangleF area, TileSelector selector = null) {
-            for (var x = 0; x <= area.Width.Ceil(); x++)
-                for (var y = 0; y <= area.Height.Ceil(); y++) {
-                    var tile = this[area.X.Floor() + x, area.Y.Floor() + y];
+            for (var x = area.X.Floor(); x < area.Right.Ceil(); x++)
+                for (var y = area.Y.Floor(); y < area.Bottom.Ceil(); y++) {
+                    var tile = this[x, y];
                     if (tile != null && (selector == null || selector(tile)))
                         yield return tile;
                 }

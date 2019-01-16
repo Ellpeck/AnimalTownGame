@@ -22,25 +22,18 @@ namespace AnimalTownGame.Rendering {
                 Math.Min(map.HeightInTiles, (bottomRight.Y - fY).Ceil()));
 
             batch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
-            for (var x = (int) frustum.X; x < frustum.Right; x++) {
-                for (var y = (int) frustum.Y; y < frustum.Bottom; y++) {
-                    var tile = map[x, y];
-                    if (tile == null)
-                        continue;
-                    tile.Draw(batch);
-
-                    if (DisplayBounds) {
-                        var bounds = tile.GetCollisionBounds();
-                        if (bounds != Rectangle.Empty)
-                            batch.DrawRectangle(bounds.Location.ToVector2(), bounds.Size, Color.Red, 1F / Camera.Scale);
-                    }
-                }
-            }
+            foreach (var tile in map.GetTilesInArea(frustum))
+                tile.Draw(batch);
             DrawObjects(batch, map.AllObjects, frustum, false);
             batch.End();
 
             if (DisplayBounds) {
                 batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
+                foreach (var tile in map.GetTilesInArea(frustum)) {
+                    var bounds = tile.GetCollisionBounds();
+                    if (bounds != Rectangle.Empty)
+                        batch.DrawRectangle(bounds.Location.ToVector2(), bounds.Size, Color.Red, 1F / Camera.Scale);
+                }
                 DrawObjects(batch, map.AllObjects, frustum, true);
                 batch.End();
             }

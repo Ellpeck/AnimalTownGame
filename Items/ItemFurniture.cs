@@ -15,8 +15,6 @@ namespace AnimalTownGame.Items {
         }
 
         public override IEnumerable<ComponentButton> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
-            foreach (var comp in base.GetContextMenu(slot, menu))
-                yield return comp;
             var map = GameImpl.Instance.CurrentMap;
             if (map != null && map.CanHaveFurniture)
                 yield return new ComponentButton(menu,
@@ -30,6 +28,8 @@ namespace AnimalTownGame.Items {
                         }
                         return false;
                     });
+            foreach (var comp in base.GetContextMenu(slot, menu))
+                yield return comp;
         }
 
         public void DrawPreview(SpriteBatch batch, Vector2 position, Color color, bool offset) {

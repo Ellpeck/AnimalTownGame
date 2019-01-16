@@ -95,7 +95,8 @@ namespace AnimalTownGame.Main {
 
         Default,
         Door,
-        Dialog
+        Dialog,
+        Pick
 
     }
 }

@@ -19,8 +19,9 @@ namespace AnimalTownGame.Objects.Static {
         }
 
         public override bool OnMouse(Vector2 pos, MouseButton button, PressType type) {
-            if (button == MouseButton.Right && type == PressType.Pressed) {
-                if (!this.IsCovered()) {
+            if (button == MouseButton.Right && !this.IsCovered()) {
+                InterfaceManager.SetCursorType(CursorType.Pick, 1F);
+                if (type == PressType.Pressed) {
                     InterfaceManager.Overlay.CursorItem = this.Type.Instance();
                     this.Map.StaticObjects.Remove(this);
                     return true;

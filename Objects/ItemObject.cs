@@ -1,4 +1,5 @@
 using AnimalTownGame.Items;
+using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Misc;
 using AnimalTownGame.Objects.Characters;
@@ -17,10 +18,29 @@ namespace AnimalTownGame.Objects {
             this.Item = item;
             this.DepthOffset = -0.25F;
             this.RenderBounds = Bounds;
+            this.HighlightBounds = Bounds;
         }
 
         public override void Draw(SpriteBatch batch) {
             this.Item.Draw(batch, this.Position - Vector2.One * 0.5F, 1F / 16F, this.GetRenderDepth(), false);
+        }
+
+        public override bool OnMouse(Vector2 pos, MouseButton button, PressType type) {
+            if (button == MouseButton.Right) {
+                var game = GameImpl.Instance;
+                var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position) <= 1;
+                InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
+                if (closeEnough && type == PressType.Pressed) {
+                    var inv = GameImpl.Instance.Player.Inventory;
+                    for (var i = 0; i < inv.Length; i++)
+                        if (inv[i] == null) {
+                            inv[i] = this.Item;
+                            this.Map.DynamicObjects.Remove(this);
+                            return true;
+                        }
+                }
+            }
+            return false;
         }
 
         public static Vector2 GetFeasibleDropPos(Map map, Vector2 pos) {
