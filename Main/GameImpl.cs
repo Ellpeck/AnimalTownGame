@@ -45,7 +45,7 @@ namespace AnimalTownGame.Main {
             var data = SaveManager.Load("save");
             this.MapSeed = data?.Seed ?? new Random().Next();
 
-            var town = this.AddMap(MapGenerator.GenerateTown(this.MapSeed));
+            var town = this.AddMap(MapGenerator.GenerateTown(this.MapSeed, data == null));
 
             var villager = new Villager("Player", town, new Vector2(35.5F, 32.5F));
             town.DynamicObjects.Add(villager);
@@ -60,6 +60,7 @@ namespace AnimalTownGame.Main {
                 this.Player = data.Player.Load(this.Maps);
 
                 var passed = CurrentTime.Subtract(data.LastPlayedTime);
+                Console.WriteLine(passed + " since last play");
                 foreach (var map in this.Maps.Values)
                     map.UpdateRealTime(CurrentTime, data.LastPlayedTime, passed);
             } else {

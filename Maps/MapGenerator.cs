@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace AnimalTownGame.Maps {
     public static class MapGenerator {
 
-        public static Map GenerateTown(int seed) {
+        public static Map GenerateTown(int seed, bool firstTime) {
             var rand = new Random(seed);
             var map = new Map("Town", 64, 64, false, false);
 
@@ -15,6 +15,14 @@ namespace AnimalTownGame.Maps {
             for (var x = 0; x < map.WidthInTiles; x++)
                 for (var y = 0; y < map.HeightInTiles; y++)
                     map.SetTile(new Point(x, y), rand.NextDouble() >= 0.6 ? Registry.TileDarkGrass : Registry.TileGrass);
+
+            if (firstTime) {
+                // Trees
+                for (var i = 0; i < 20; i++) {
+                    var pos = new Vector2(rand.Next(map.WidthInTiles - 10) + 5, rand.Next(map.HeightInTiles - 10) + 5) + Vector2.One * 0.5F;
+                    map.StaticObjects.Add(new FruitTree(FruitTree.Types[0], map, pos));
+                }
+            }
 
             return map;
         }

@@ -25,5 +25,9 @@
             <Key>Stove</Key>
             <Value>Stove</Value>
         </Item>
+        <Item>
+            <Key>Apple</Key>
+            <Value>Apple</Value>
+        </Item>
     </Asset>
 </XnaContent>

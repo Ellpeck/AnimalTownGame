@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AnimalTownGame.Interfaces.Components;
 using AnimalTownGame.Main;
 using Microsoft.Xna.Framework;
@@ -29,7 +30,7 @@ namespace AnimalTownGame.Items {
         }
 
         public virtual IEnumerable<InterfaceComponent> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
-            return null;
+            yield break;
         }
 
     }

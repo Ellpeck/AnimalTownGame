@@ -38,6 +38,15 @@ namespace AnimalTownGame.Main {
                 }
                 return false;
             }));
+            AddKeybind(new Keybind("CheatItems", Keys.F1, (oldType, newType) => {
+                if (newType == PressType.Pressed) {
+                    var i = 0;
+                    foreach (var type in Registry.ItemTypes.Values)
+                        GameImpl.Instance.Player.Inventory[i++] = type.Instance();
+                    return true;
+                }
+                return false;
+            }));
         }
 
         public static void AddKeybind(Keybind bind) {

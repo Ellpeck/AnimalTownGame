@@ -81,6 +81,7 @@
     <Compile Include="Misc\Direction.cs" />
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Misc\PathFinding.cs" />
+    <Compile Include="Misc\Util.cs" />
     <Compile Include="Objects\Characters\Character.cs" />
     <Compile Include="Objects\Characters\Player.cs" />
     <Compile Include="Objects\Characters\Villager.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Objects\Static\Teleporter.cs" />
     <Compile Include="Objects\Static\VillagerHouse.cs" />
     <Compile Include="Objects\Static\StaticObject.cs" />
-    <Compile Include="Objects\Static\Tree.cs" />
+    <Compile Include="Objects\Static\FruitTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Camera.cs" />
     <Compile Include="Rendering\MapRenderer.cs" />
@@ -118,7 +119,9 @@
     <Content Include="Content\Objects\Furniture\WoodDiningTable.png" />
     <Content Include="Content\Objects\Houses\RedBrick.png" />
     <Content Include="Content\Objects\Houses\WhiteWood.png" />
-    <Content Include="Content\Objects\Tree.png" />
+    <Content Include="Content\Objects\Trees\AppleTree.pdn" />
+    <Content Include="Content\Objects\Trees\AppleTree.png" />
+    <Content Include="Content\Objects\Trees\Tree.png" />
     <Content Include="Content\Tilesets\Inside.png" />
     <Content Include="Content\Tilesets\Outside.png" />
     <Content Include="Content\Tilesets\Town.png" />

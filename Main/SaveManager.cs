@@ -55,10 +55,8 @@ namespace AnimalTownGame.Main {
             this.LastPlayedTime = time;
             this.Player = new PlayerInfo(player);
             this.Maps = new List<MapInfo>();
-            foreach (var map in maps) {
-                if (map.CanHaveFurniture)
-                    this.Maps.Add(new MapInfo(map));
-            }
+            foreach (var map in maps)
+                this.Maps.Add(new MapInfo(map));
         }
 
         public SaveData() {
@@ -104,16 +102,21 @@ namespace AnimalTownGame.Main {
     public class MapInfo {
 
         public string Name;
-        public List<FurnitureInfo> Furniture;
+        public List<StaticObjectInfo> StaticObjects;
 
         public MapInfo(Map map) {
             this.Name = map.Name;
-            this.Furniture = new List<FurnitureInfo>();
+            this.StaticObjects = new List<StaticObjectInfo>();
             foreach (var obj in map.StaticObjects) {
                 var furniture = obj as Furniture;
-                if (furniture == null)
+                if (furniture != null) {
+                    this.StaticObjects.Add(new FurnitureInfo(furniture));
                     continue;
-                this.Furniture.Add(new FurnitureInfo(furniture));
+                }
+                var tree = obj as FruitTree;
+                if (tree != null) {
+                    this.StaticObjects.Add(new FruitTreeInfo(tree));
+                }
             }
         }
 
@@ -122,30 +125,71 @@ namespace AnimalTownGame.Main {
 
         public void Load(Dictionary<string, Map> maps) {
             var map = maps[this.Name];
-            foreach (var furniture in this.Furniture) {
-                map.StaticObjects.Add(furniture.Load(map));
-            }
+            foreach (var obj in this.StaticObjects)
+                map.StaticObjects.Add(obj.Load(map));
         }
 
     }
 
     [Serializable]
-    public class FurnitureInfo {
+    [XmlInclude(typeof(FurnitureInfo))]
+    [XmlInclude(typeof(FruitTreeInfo))]
+    public abstract class StaticObjectInfo {
 
-        public string Type;
         public Vector2 Position;
 
-        public FurnitureInfo(Furniture furniture) {
+        public StaticObjectInfo(Vector2 position) {
+            this.Position = position;
+        }
+
+        public StaticObjectInfo() {
+        }
+
+        public abstract StaticObject Load(Map map);
+
+    }
+
+    [Serializable]
+    public class FurnitureInfo : StaticObjectInfo {
+
+        public string Type;
+
+        public FurnitureInfo(Furniture furniture) : base(furniture.Position) {
             this.Type = furniture.Type.Name;
-            this.Position = furniture.Position;
         }
 
         public FurnitureInfo() {
         }
 
-        public Furniture Load(Map map) {
+        public override StaticObject Load(Map map) {
             var type = (FurnitureType) Registry.ItemTypes[this.Type];
             return new Furniture(type, map, this.Position);
+        }
+
+    }
+
+    [Serializable]
+    public class FruitTreeInfo : StaticObjectInfo {
+
+        public string Type;
+        public long FruitTime;
+
+        public FruitTreeInfo(FruitTree tree) : base(tree.Position) {
+            this.Type = tree.Type.Name;
+            this.FruitTime = tree.FruitTimer.Ticks;
+        }
+
+        public FruitTreeInfo() {
+        }
+
+        public override StaticObject Load(Map map) {
+            foreach (var type in FruitTree.Types)
+                if (type.Name == this.Type) {
+                    return new FruitTree(type, map, this.Position) {
+                        FruitTimer = TimeSpan.FromTicks(this.FruitTime)
+                    };
+                }
+            return null;
         }
 
     }
