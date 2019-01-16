@@ -81,7 +81,6 @@
     <Compile Include="Misc\Direction.cs" />
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Misc\PathFinding.cs" />
-    <Compile Include="Misc\Util.cs" />
     <Compile Include="Objects\Characters\Character.cs" />
     <Compile Include="Objects\Characters\Player.cs" />
     <Compile Include="Objects\Characters\Villager.cs" />

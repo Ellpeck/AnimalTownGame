@@ -46,13 +46,13 @@ namespace AnimalTownGame.Main {
     public class SaveData {
 
         public int Seed;
-        public DateTime LastPlayedTime;
+        public DateTime LastRealTimeUpdate;
         public PlayerInfo Player;
         public List<MapInfo> Maps;
 
-        public SaveData(int seed, DateTime time, Player player, IEnumerable<Map> maps) {
+        public SaveData(int seed, DateTime lastRealTimeUpdate, Player player, IEnumerable<Map> maps) {
             this.Seed = seed;
-            this.LastPlayedTime = time;
+            this.LastRealTimeUpdate = lastRealTimeUpdate;
             this.Player = new PlayerInfo(player);
             this.Maps = new List<MapInfo>();
             foreach (var map in maps)

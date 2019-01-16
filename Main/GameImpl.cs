@@ -59,10 +59,8 @@ namespace AnimalTownGame.Main {
                     map.Load(this.Maps);
                 this.Player = data.Player.Load(this.Maps);
 
-                var passed = CurrentTime.Subtract(data.LastPlayedTime);
-                Console.WriteLine(passed + " since last play");
-                foreach (var map in this.Maps.Values)
-                    map.UpdateRealTime(CurrentTime, data.LastPlayedTime, passed);
+                this.lastRealTimeUpdate = data.LastRealTimeUpdate;
+                this.ForceRealTimeUpdate();
             } else {
                 this.Player = new Player(town, new Vector2(22.5F, 22.5F));
                 town.DynamicObjects.Add(this.Player);
@@ -80,14 +78,18 @@ namespace AnimalTownGame.Main {
             foreach (var map in this.Maps.Values)
                 map.Update(gameTime, map == this.CurrentMap);
 
-            var passed = CurrentTime.Subtract(this.lastRealTimeUpdate);
-            if (passed.Minutes >= 10) {
-                foreach (var map in this.Maps.Values)
-                    map.UpdateRealTime(CurrentTime, this.lastRealTimeUpdate, passed);
-                this.lastRealTimeUpdate = CurrentTime;
-            }
+            if (CurrentTime.Subtract(this.lastRealTimeUpdate).Minutes >= 10)
+                this.ForceRealTimeUpdate();
 
             this.Camera.Update(this.CurrentMap);
+        }
+
+        private void ForceRealTimeUpdate() {
+            var passed = CurrentTime.Subtract(this.lastRealTimeUpdate);
+            Console.WriteLine("Update at " + CurrentTime + ", last at " + this.lastRealTimeUpdate + " (" + passed + " passed)");
+            foreach (var map in this.Maps.Values)
+                map.UpdateRealTime(CurrentTime, this.lastRealTimeUpdate, passed);
+            this.lastRealTimeUpdate = CurrentTime;
         }
 
         protected override void Draw(GameTime gameTime) {
@@ -103,7 +105,7 @@ namespace AnimalTownGame.Main {
         }
 
         protected override void UnloadContent() {
-            SaveManager.Save("save", new SaveData(this.MapSeed, CurrentTime, this.Player, this.Maps.Values));
+            SaveManager.Save("save", new SaveData(this.MapSeed, this.lastRealTimeUpdate, this.Player, this.Maps.Values));
         }
 
         private void OnWindowSizeChange(object window, EventArgs args) {
