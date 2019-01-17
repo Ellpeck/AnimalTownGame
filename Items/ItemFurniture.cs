@@ -18,7 +18,7 @@ namespace AnimalTownGame.Items {
             var map = GameImpl.Instance.CurrentMap;
             if (map != null && map.CanHaveFurniture)
                 yield return new ComponentButton(menu,
-                    new RectangleF(Vector2.Zero, new Size2(menu.Bounds.Width - 2, 6)), Locale.GetInterface("Place"),
+                    new RectangleF(Vector2.Zero, new Size2(20, 6)), Locale.GetInterface("Place"),
                     (button, pressType) => {
                         if (button == MouseButton.Left && pressType == PressType.Pressed) {
                             InterfaceManager.Overlay.CursorItem = this;

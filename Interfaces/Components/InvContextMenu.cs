@@ -12,16 +12,20 @@ namespace AnimalTownGame.Interfaces.Components {
         public InvContextMenu(Inventory iface, ItemSlot slot, Vector2 position) : base(iface) {
             this.Slot = slot;
             this.inventory = iface;
-            this.Bounds = new RectangleF(position, new Size2(20, 30));
 
             var item = slot.Items[slot.Index];
             if (item != null) {
+                var width = 0F;
                 var yOffset = 1F;
                 foreach (var comp in item.GetContextMenu(this.Slot, this)) {
-                    comp.Bounds.Position = this.Bounds.Position + new Vector2(1, yOffset);
+                    comp.Bounds.Position = position + new Vector2(1, yOffset);
                     this.Components.Add(comp);
                     yOffset += comp.Bounds.Height + 1;
+
+                    if (comp.Bounds.Width > width)
+                        width = comp.Bounds.Width;
                 }
+                this.Bounds = new RectangleF(position, new Size2(width+2, yOffset));
             }
         }
 

@@ -53,7 +53,7 @@ namespace AnimalTownGame.Objects.Characters {
 
             var myBounds = this.CollisionBounds.Move(this.Position);
             if (myBounds != RectangleF.Empty)
-                foreach (var obj in this.Map.StaticObjects) {
+                foreach (var obj in this.Map.Objects) {
                     var bounds = obj.IntersectionBounds.Move(obj.Position);
                     if (myBounds.IntersectsNonEmpty(bounds))
                         obj.OnIntersectWith(this);

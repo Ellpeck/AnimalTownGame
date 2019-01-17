@@ -23,7 +23,7 @@ namespace AnimalTownGame.Objects.Static {
                 InterfaceManager.SetCursorType(CursorType.Pick, 1F);
                 if (type == PressType.Pressed) {
                     InterfaceManager.Overlay.CursorItem = this.Type.Instance();
-                    this.Map.StaticObjects.Remove(this);
+                    this.Map.Objects.Remove(this);
                     return true;
                 }
             }
@@ -32,7 +32,7 @@ namespace AnimalTownGame.Objects.Static {
 
         public bool IsCovered() {
             var myBounds = this.Type.PlacementBounds.Move(this.Position);
-            foreach (var obj in this.Map.StaticObjects) {
+            foreach (var obj in this.Map.Objects) {
                 if (obj == this)
                     continue;
                 var bounds = obj.CollisionBounds.Move(obj.Position);

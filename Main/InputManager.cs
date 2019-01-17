@@ -84,7 +84,7 @@ namespace AnimalTownGame.Main {
                 if (!InterfaceManager.HandleMouse(mouseButton, type)) {
                     if (map != null && InterfaceManager.CurrentInterface == null) {
                         var pos = camera.ToWorldPos(mouse.Position.ToVector2());
-                        foreach (var obj in map.AllObjects) {
+                        foreach (var obj in map.Objects) {
                             var bounds = obj.HighlightBounds.Move(obj.Position);
                             if (bounds != RectangleF.Empty && bounds.Contains(pos))
                                 if (obj.OnMouse(pos, mouseButton, type))

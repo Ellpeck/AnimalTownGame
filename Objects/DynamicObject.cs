@@ -15,7 +15,7 @@ namespace AnimalTownGame.Objects {
         public DynamicObject(Map map, Vector2 position) : base(map, position) {
         }
 
-        public virtual void Update(GameTime gameTime, bool isCurrent) {
+        public override void Update(GameTime gameTime, bool isCurrent) {
             this.LastPosition = this.Position;
             if (this.Velocity.X != 0) {
                 var newX = new Vector2(this.Position.X + this.Velocity.X, this.Position.Y);
@@ -35,7 +35,7 @@ namespace AnimalTownGame.Objects {
         }
 
         public virtual void Teleport(Map newMap, Vector2 pos) {
-            this.Map.DynamicObjects.Remove(this);
+            this.Map.Objects.Remove(this);
             this.Map = newMap;
             this.Map.AddObject(this);
             this.Position = pos;

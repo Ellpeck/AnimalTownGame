@@ -35,7 +35,7 @@ namespace AnimalTownGame.Objects {
                     for (var i = 0; i < inv.Length; i++)
                         if (inv[i] == null) {
                             inv[i] = this.Item;
-                            this.Map.DynamicObjects.Remove(this);
+                            this.Map.Objects.Remove(this);
                             return true;
                         }
                 }

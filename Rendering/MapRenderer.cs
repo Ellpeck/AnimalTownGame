@@ -24,7 +24,7 @@ namespace AnimalTownGame.Rendering {
             batch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, camera.ViewMatrix);
             foreach (var tile in map.GetTilesInArea(frustum))
                 tile.Draw(batch);
-            DrawObjects(batch, map.AllObjects, frustum, false);
+            DrawObjects(batch, map.Objects, frustum, false);
             batch.End();
 
             if (DisplayBounds) {
@@ -34,7 +34,7 @@ namespace AnimalTownGame.Rendering {
                     if (bounds != Rectangle.Empty)
                         batch.DrawRectangle(bounds.Location.ToVector2(), bounds.Size, Color.Red, 1F / Camera.Scale);
                 }
-                DrawObjects(batch, map.AllObjects, frustum, true);
+                DrawObjects(batch, map.Objects, frustum, true);
                 batch.End();
             }
         }

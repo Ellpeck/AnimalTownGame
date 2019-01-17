@@ -27,6 +27,7 @@ namespace AnimalTownGame.Objects.Static {
             this.Type = type;
             this.FruitTimer = this.Type.Time;
             this.RenderBounds = new RectangleF(-1.5F, -3.5F, 3, 4);
+            this.FadeBounds = new RectangleF(-1.5F, -3.5F, 3, 3);
             this.CollisionBounds = new RectangleF(-0.3F, -0.3F, 0.6F, 0.6F);
         }
 
@@ -36,10 +37,12 @@ namespace AnimalTownGame.Objects.Static {
         }
 
         public override void Draw(SpriteBatch batch) {
+            var color = new Color(this.ColorMod, this.ColorMod, this.ColorMod, this.ColorMod);
+
             var treeHeight = this.Texture.Height * 0.8F;
             batch.Draw(this.Texture,
                 this.Position + this.RenderBounds.Position,
-                new Rectangle(0, 0, this.Texture.Width, (int) treeHeight), Color.White, 0F, Vector2.Zero,
+                new Rectangle(0, 0, this.Texture.Width, (int) treeHeight), color, 0F, Vector2.Zero,
                 new Vector2(this.RenderBounds.Width / this.Texture.Width, this.RenderBounds.Height / treeHeight),
                 SpriteEffects.None, this.GetRenderDepth());
 
@@ -61,7 +64,7 @@ namespace AnimalTownGame.Objects.Static {
                 var fruitPos = FruitOffsets[i];
                 batch.Draw(this.Texture,
                     this.Position + this.RenderBounds.Position + fruitPos,
-                    srcRect, Color.White, 0F, Vector2.Zero,
+                    srcRect, color, 0F, Vector2.Zero,
                     new Vector2(1F / srcRect.Width, 1F / srcRect.Height),
                     SpriteEffects.None, 1 / 1000F);
             }

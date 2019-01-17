@@ -36,7 +36,7 @@ namespace AnimalTownGame.Items {
         public virtual IEnumerable<ComponentButton> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
             var game = GameImpl.Instance;
             yield return new ComponentButton(menu,
-                new RectangleF(Vector2.Zero, new Size2(menu.Bounds.Width - 2, 6)), Locale.GetInterface("Drop"),
+                new RectangleF(Vector2.Zero, new Size2(20, 6)), Locale.GetInterface("Drop"),
                 (button, pressType) => {
                     if (button == MouseButton.Left && pressType == PressType.Pressed) {
                         var pos = ItemObject.GetFeasibleDropPos(game.CurrentMap, game.Player.Position);

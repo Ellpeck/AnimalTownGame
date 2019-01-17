@@ -18,9 +18,7 @@ namespace AnimalTownGame.Maps {
         public readonly Vector2 EntryPoint;
         private readonly Tile[,] tileGrid;
 
-        public readonly List<DynamicObject> DynamicObjects = new List<DynamicObject>();
-        public readonly List<StaticObject> StaticObjects = new List<StaticObject>();
-        public IEnumerable<MapObject> AllObjects => this.DynamicObjects.Concat<MapObject>(this.StaticObjects);
+        public readonly List<MapObject> Objects = new List<MapObject>();
 
         public Tile this[Point point] => this[point.X, point.Y];
 
@@ -40,22 +38,18 @@ namespace AnimalTownGame.Maps {
         }
 
         public void AddObject(MapObject obj) {
-            var stat = obj as StaticObject;
-            if (stat != null)
-                this.StaticObjects.Add(stat);
-            else
-                this.DynamicObjects.Add((DynamicObject) obj);
+            this.Objects.Add(obj);
         }
 
         public virtual void UpdateRealTime(DateTime now, DateTime lastUpdate, TimeSpan passed) {
-            foreach (var obj in this.AllObjects)
+            foreach (var obj in this.Objects)
                 obj.UpdateRealTime(now, lastUpdate, passed);
         }
 
         public void Update(GameTime gameTime, bool isCurrent) {
             this.Ticks++;
 
-            foreach (var obj in this.DynamicObjects)
+            foreach (var obj in this.Objects)
                 obj.Update(gameTime, isCurrent);
         }
 
@@ -77,7 +71,7 @@ namespace AnimalTownGame.Maps {
         }
 
         public IEnumerable<MapObject> GetObjectsInArea(RectangleF area, BoundSelector boundSelector, ObjectSelector objSelector = null) {
-            foreach (var obj in this.AllObjects) {
+            foreach (var obj in this.Objects) {
                 if (objSelector != null && !objSelector(obj))
                     continue;
                 var bound = boundSelector(obj).Move(obj.Position);

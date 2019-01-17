@@ -109,7 +109,7 @@ namespace AnimalTownGame.Main {
         public MapInfo(Map map) {
             this.Name = map.Name;
             this.Objects = new List<MapObjectInfo>();
-            foreach (var obj in map.AllObjects) {
+            foreach (var obj in map.Objects) {
                 var info = Convert(obj);
                 if (info != null)
                     this.Objects.Add(info);

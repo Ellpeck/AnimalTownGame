@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
 using AnimalTownGame.Misc;
+using AnimalTownGame.Objects.Characters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -14,6 +15,7 @@ namespace AnimalTownGame.Objects {
         public RectangleF RenderBounds;
         public RectangleF CollisionBounds;
         public RectangleF HighlightBounds;
+        public RectangleF IntersectionBounds;
         public float DepthOffset;
         public Vector2 Position;
 
@@ -22,10 +24,16 @@ namespace AnimalTownGame.Objects {
             this.Position = position;
         }
 
+        public virtual void Update(GameTime gameTime, bool isCurrent) {
+        }
+
         public virtual void UpdateRealTime(DateTime now, DateTime lastUpdate, TimeSpan passed) {
         }
 
         public virtual void Draw(SpriteBatch batch) {
+        }
+
+        public virtual void OnIntersectWith(Character obj) {
         }
 
         public float GetRenderDepth() {
