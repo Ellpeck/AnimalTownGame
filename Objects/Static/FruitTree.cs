@@ -29,6 +29,28 @@ namespace AnimalTownGame.Objects.Static {
             this.RenderBounds = new RectangleF(-1.5F, -3.5F, 3, 4);
             this.FadeBounds = new RectangleF(-1.5F, -3.5F, 3, 3);
             this.CollisionBounds = new RectangleF(-0.3F, -0.3F, 0.6F, 0.6F);
+            this.HighlightBounds = new RectangleF(-0.3F, -2F, 0.6F, 2.3F);
+        }
+
+        public override bool OnMouse(Vector2 pos, MouseButton button, PressType type) {
+            if (button == MouseButton.Left && this.FruitTimer <= TimeSpan.Zero) {
+                var game = GameImpl.Instance;
+                var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position) <= 1;
+                InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
+                if (closeEnough && type == PressType.Pressed) {
+                    foreach (var off in FruitOffsets) {
+                        var offset = this.Position + this.RenderBounds.Position + off + new Vector2(0.5F, 0.5F);
+                        var obj = new ItemObject(this.Type.Drop.Instance(), this.Map, offset);
+                        obj.DestinationY = this.Position.Y + off.Y;
+                        obj.Velocity.X = this.Map.Random.NextDouble() < 0.5 ? -0.01F : 0.01F;
+                        this.Map.AddObject(obj);
+                    }
+
+                    this.FruitTimer = this.Type.Time;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override void UpdateRealTime(DateTime now, DateTime lastUpdate, TimeSpan passed) {

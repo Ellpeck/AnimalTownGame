@@ -36,7 +36,7 @@ namespace AnimalTownGame.Objects {
         public virtual void OnIntersectWith(Character obj) {
         }
 
-        public float GetRenderDepth() {
+        public virtual float GetRenderDepth() {
             return Math.Max(0, (this.Position.Y + this.DepthOffset) / this.Map.HeightInTiles / 1000F);
         }
 

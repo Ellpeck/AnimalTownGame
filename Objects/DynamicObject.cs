@@ -11,6 +11,7 @@ namespace AnimalTownGame.Objects {
         public Vector2 LastPosition;
         public Vector2 Velocity;
         public bool NoClip;
+        protected Vector2 VelocityDamper = new Vector2(0.5F);
 
         public DynamicObject(Map map, Vector2 position) : base(map, position) {
         }
@@ -27,7 +28,7 @@ namespace AnimalTownGame.Objects {
                 if (this.NoClip || !this.IsCollidingPos(newY))
                     this.Position = newY;
             }
-            this.Velocity *= 0.5F;
+            this.Velocity *= this.VelocityDamper;
         }
 
         public bool IsCollidingPos(Vector2 pos) {

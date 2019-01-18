@@ -209,9 +209,13 @@ namespace AnimalTownGame.Main {
     public class ItemObjectInfo : MapObjectInfo {
 
         public string Type;
+        public Vector2 Velocity;
+        public float DestinationY;
 
         public ItemObjectInfo(ItemObject item) : base(item.Position) {
             this.Type = item.Item.Type.Name;
+            this.Velocity = item.Velocity;
+            this.DestinationY = item.DestinationY;
         }
 
         public ItemObjectInfo() {
@@ -219,7 +223,10 @@ namespace AnimalTownGame.Main {
 
         public override MapObject Load(Map map) {
             var item = Registry.ItemTypes[this.Type].Instance();
-            return new ItemObject(item, map, this.Position);
+            var obj = new ItemObject(item, map, this.Position);
+            obj.Velocity = this.Velocity;
+            obj.DestinationY = this.DestinationY;
+            return obj;
         }
 
     }

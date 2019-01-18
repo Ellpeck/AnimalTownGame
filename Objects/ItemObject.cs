@@ -1,3 +1,4 @@
+using System;
 using AnimalTownGame.Items;
 using AnimalTownGame.Main;
 using AnimalTownGame.Maps;
@@ -13,12 +14,30 @@ namespace AnimalTownGame.Objects {
         private static readonly RectangleF Bounds = new RectangleF(-0.5F, -0.5F, 1, 1);
 
         public readonly Item Item;
+        public float DestinationY;
 
         public ItemObject(Item item, Map map, Vector2 position) : base(map, position) {
             this.Item = item;
             this.DepthOffset = -0.25F;
+            this.VelocityDamper = new Vector2(0.99F, 1F);
+            this.NoClip = true;
             this.RenderBounds = Bounds;
             this.HighlightBounds = Bounds;
+        }
+
+        public override void Update(GameTime gameTime, bool isCurrent) {
+            if (this.DestinationY != 0) {
+                if (this.Position.Y < this.DestinationY) {
+                    this.Velocity.Y += 0.0025F;
+                    this.DepthOffset = -(this.Position.Y - this.DestinationY);
+                } else {
+                    this.Velocity = Vector2.Zero;
+                    this.DestinationY = 0;
+                    this.DepthOffset = -0.25F;
+                }
+            }
+
+            base.Update(gameTime, isCurrent);
         }
 
         public override void Draw(SpriteBatch batch) {
@@ -26,7 +45,7 @@ namespace AnimalTownGame.Objects {
         }
 
         public override bool OnMouse(Vector2 pos, MouseButton button, PressType type) {
-            if (button == MouseButton.Right) {
+            if (button == MouseButton.Right && this.DestinationY == 0) {
                 var game = GameImpl.Instance;
                 var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position) <= 1;
                 InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
