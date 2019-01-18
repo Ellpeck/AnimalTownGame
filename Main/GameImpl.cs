@@ -31,7 +31,8 @@ namespace AnimalTownGame.Main {
 
             this.graphicsManager = new GraphicsDeviceManager(this) {
                 PreferredBackBufferWidth = 1280,
-                PreferredBackBufferHeight = 720
+                PreferredBackBufferHeight = 720,
+                SynchronizeWithVerticalRetrace = false
             };
             this.Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
@@ -78,14 +79,14 @@ namespace AnimalTownGame.Main {
             foreach (var map in this.Maps.Values)
                 map.Update(gameTime, map == this.CurrentMap);
 
-            if (CurrentTime.Subtract(this.lastRealTimeUpdate).Minutes >= 10)
+            if ((CurrentTime - this.lastRealTimeUpdate).Minutes >= 10)
                 this.ForceRealTimeUpdate();
 
             this.Camera.Update(this.CurrentMap);
         }
 
         private void ForceRealTimeUpdate() {
-            var passed = CurrentTime.Subtract(this.lastRealTimeUpdate);
+            var passed = CurrentTime - this.lastRealTimeUpdate;
             Console.WriteLine("Update at " + CurrentTime + ", last at " + this.lastRealTimeUpdate + " (" + passed + " passed)");
             foreach (var map in this.Maps.Values)
                 map.UpdateRealTime(CurrentTime, this.lastRealTimeUpdate, passed);

@@ -19,27 +19,27 @@ namespace AnimalTownGame.Main {
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(SaveData));
 
         public static void Save(string name, SaveData data) {
-            var file = GetLocation(name);
-            var info = new FileInfo(file);
-            if (!info.Directory.Exists)
-                info.Directory.Create();
-            else if (File.Exists(file))
-                File.Delete(file);
-            using (var stream = File.Create(file))
+            var info = GetLocation(name);
+            var dir = info.Directory;
+            if (dir != null && !dir.Exists)
+                dir.Create();
+            else if (info.Exists)
+                info.Delete();
+            using (var stream = info.Create())
                 Serializer.Serialize(stream, data);
         }
 
         public static SaveData Load(string name) {
-            var file = GetLocation(name);
-            if (File.Exists(file))
-                using (var stream = File.Open(file, FileMode.Open, FileAccess.Read))
+            var info = GetLocation(name);
+            if (info.Exists)
+                using (var stream = info.Open(FileMode.Open, FileAccess.Read))
                     return (SaveData) Serializer.Deserialize(stream);
             return null;
         }
 
-        private static string GetLocation(string name) {
+        private static FileInfo GetLocation(string name) {
             var appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            return Path.Combine(appdata, "AnimalTownGame", "Save", name + ".sav");
+            return new FileInfo(Path.Combine(appdata, "AnimalTownGame", "Save", name + ".sav"));
         }
 
     }
