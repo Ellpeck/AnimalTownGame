@@ -65,6 +65,7 @@
     <Compile Include="Interfaces\Overlay.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemFurniture.cs" />
+    <Compile Include="Items\ItemTool.cs" />
     <Compile Include="Main\CutsceneManager.cs" />
     <Compile Include="Main\GameImpl.cs" />
     <Compile Include="Main\InputManager.cs" />

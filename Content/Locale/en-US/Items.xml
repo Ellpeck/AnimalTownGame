@@ -29,5 +29,13 @@
             <Key>Apple</Key>
             <Value>Apple</Value>
         </Item>
+        <Item>
+            <Key>Axe</Key>
+            <Value>Axe</Value>
+        </Item>
+        <Item>
+            <Key>Shovel</Key>
+            <Value>Shovel</Value>
+        </Item>
     </Asset>
 </XnaContent>

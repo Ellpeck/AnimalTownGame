@@ -71,15 +71,14 @@ namespace AnimalTownGame.Main {
 
         public string Map;
         public Vector2 Position;
-        public List<string> Items;
+        public ItemListInfo Inventory;
+        public ItemListInfo Tools;
 
         public PlayerInfo(Player player) {
             this.Map = player.Map.Name;
             this.Position = player.Position;
-            this.Items = new List<string>();
-            foreach (var item in player.Inventory) {
-                this.Items.Add(item == null ? null : item.Type.Name);
-            }
+            this.Inventory = new ItemListInfo(player.Inventory);
+            this.Tools = new ItemListInfo(player.Tools);
         }
 
         public PlayerInfo() {
@@ -87,15 +86,36 @@ namespace AnimalTownGame.Main {
 
         public Player Load(Dictionary<string, Map> maps) {
             var player = new Player(maps[this.Map], this.Position);
-            for (var i = 0; i < this.Items.Count; i++) {
-                var item = this.Items[i];
-                if (item == null)
-                    player.Inventory[i] = null;
-                else
-                    player.Inventory[i] = Registry.ItemTypes[item].Instance();
-            }
+            this.Inventory.Load(player.Inventory);
+            this.Tools.Load(player.Tools);
             player.Map.AddObject(player);
             return player;
+        }
+
+    }
+
+    [Serializable]
+    public class ItemListInfo {
+
+        public List<string> Items;
+
+        public ItemListInfo(params Item[] items) {
+            this.Items = new List<string>();
+            foreach (var item in items)
+                this.Items.Add(item == null ? null : item.Type.Name);
+        }
+
+        public ItemListInfo() {
+        }
+
+        public void Load(Item[] items) {
+            for (var i = 0; i < this.Items.Count; i++) {
+                var item = this.Items[i];
+                if (item != null)
+                    items[i] = Registry.ItemTypes[item].Instance();
+                else
+                    items[i] = null;
+            }
         }
 
     }

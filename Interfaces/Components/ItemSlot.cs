@@ -13,14 +13,16 @@ namespace AnimalTownGame.Interfaces.Components {
         public readonly Vector2 Position;
         public readonly Item[] Items;
         public readonly int Index;
+        private readonly Fits fits;
         public new readonly ItemInterface Interface;
         private ComponentHover hoverInfo;
 
-        public ItemSlot(ItemInterface iface, Vector2 position, Item[] items, int index) : base(iface) {
+        public ItemSlot(ItemInterface iface, Vector2 position, Item[] items, int index, Fits fits = null) : base(iface) {
             this.Items = items;
             this.Index = index;
             this.Interface = iface;
             this.Position = position;
+            this.fits = fits;
         }
 
         public override bool OnMouse(MouseButton button, PressType type) {
@@ -28,6 +30,8 @@ namespace AnimalTownGame.Interfaces.Components {
                 if (!this.IsMousedComponent())
                     return false;
                 var temp = this.Interface.CursorItem;
+                if (temp != null && this.fits != null && !this.fits(temp))
+                    return false;
                 this.Interface.CursorItem = this.Items[this.Index];
                 this.Items[this.Index] = temp;
                 return true;
@@ -60,6 +64,8 @@ namespace AnimalTownGame.Interfaces.Components {
         public override bool IsMouseOver() {
             return Vector2.DistanceSquared(this.Position + Vector2.One * 7.5F, MousePos) <= 7.5F * 7.5F;
         }
+
+        public delegate bool Fits(Item item);
 
     }
 }

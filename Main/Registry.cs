@@ -24,6 +24,8 @@ namespace AnimalTownGame.Main {
         public static readonly TileType TileWall = new TileType(new Point(0, 1), TextureInside).SetWalkability(int.MaxValue);
 
         public static readonly ItemType ItemApple = new ItemType("Apple", new Point(1, 0));
+        public static readonly ItemType ItemAxe = new ToolType("Axe", new Point(2, 0));
+        public static readonly ItemType ItemShovel = new ToolType("Shovel", new Point(3, 0));
 
         public static readonly ItemType ItemWhiteLamp = new FurnitureType("WhiteLamp", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.25F, -0.2F, 0.5F, 0.6F));
         public static readonly ItemType ItemRedRug = new FurnitureType("RedRug", new RectangleF(-1.5F, -0.5F, 3, 2), RectangleF.Empty, new RectangleF(-1.5F, -0.5F, 3, 2)).SetDepthOffset(-1F);

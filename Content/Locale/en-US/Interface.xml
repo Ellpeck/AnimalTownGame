@@ -17,5 +17,13 @@
             <Key>TimeDay</Key>
             <Value>dddd d MMM</Value>
         </Item>
+        <Item>
+            <Key>Inventory</Key>
+            <Value>Inventory</Value>
+        </Item>
+        <Item>
+            <Key>Tools</Key>
+            <Value>Tools</Value>
+        </Item>
     </Asset>
 </XnaContent>

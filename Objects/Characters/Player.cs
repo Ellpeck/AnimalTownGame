@@ -8,6 +8,7 @@ namespace AnimalTownGame.Objects.Characters {
     public class Player : Character {
 
         public readonly Item[] Inventory = new Item[24];
+        public readonly Item[] Tools = new Item[4];
 
         public Player(Map map, Vector2 position) : base("Player", map, position) {
             this.WalkSpeed = 0.03F;
