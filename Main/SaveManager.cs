@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using AnimalTownGame.Items;
 using AnimalTownGame.Maps;
+using AnimalTownGame.Misc;
 using AnimalTownGame.Objects;
 using AnimalTownGame.Objects.Characters;
 using AnimalTownGame.Objects.Static;
@@ -122,7 +123,7 @@ namespace AnimalTownGame.Main {
     public class MapInfo {
 
         public string Name;
-        public List<MapObjectInfo> Objects= new List<MapObjectInfo>();
+        public List<MapObjectInfo> Objects = new List<MapObjectInfo>();
 
         public MapInfo(Map map) {
             this.Name = map.Name;
@@ -182,9 +183,11 @@ namespace AnimalTownGame.Main {
 
         public ItemListInfo Storage = new ItemListInfo();
         public string Type;
+        public string Dir;
 
         public FurnitureInfo(Furniture furniture) : base(furniture.Position) {
             this.Type = furniture.Type.Name;
+            this.Dir = furniture.Direction.Name;
             if (furniture.Type.IsStorage)
                 this.Storage = new ItemListInfo(furniture.Storage);
         }
@@ -194,7 +197,7 @@ namespace AnimalTownGame.Main {
 
         public override MapObject Load(Map map) {
             var type = (FurnitureType) Registry.ItemTypes[this.Type];
-            var furniture = new Furniture(type, map, this.Position);
+            var furniture = new Furniture(type, map, this.Position, Direction.FromName(this.Dir) ?? Direction.Down);
             if (type.IsStorage)
                 this.Storage.Load(furniture.Storage);
             return furniture;

@@ -1,3 +1,4 @@
+using System;
 using AnimalTownGame.Items;
 using AnimalTownGame.Main;
 using AnimalTownGame.Misc;
@@ -16,10 +17,29 @@ namespace AnimalTownGame.Interfaces {
         private Vector2 position;
         private Vector2 timeOffset;
         private Vector2 dateOffset;
+        public Direction PlacementDirection = Direction.Down;
 
         public Overlay() : base(GameImpl.Instance.Player) {
             var view = GameImpl.Instance.GraphicsDevice.Viewport;
             this.Init(view, new Size2(view.Width, view.Height) / InterfaceManager.Scale);
+        }
+
+        public override bool OnScroll(float scroll) {
+            var furniture = this.CursorItem as ItemFurniture;
+            if (furniture != null && furniture.Type.Rotates) {
+                for (var i = 0; i < Direction.Adjacents.Length; i++)
+                    if (Direction.Adjacents[i] == this.PlacementDirection) {
+                        var newDir = i + (scroll > 0 ? 1 : -1);
+                        if (newDir < 0)
+                            newDir = 3;
+                        else if (newDir > 3)
+                            newDir = 0;
+                        this.PlacementDirection = Direction.Adjacents[newDir];
+                        break;
+                    }
+                return true;
+            }
+            return false;
         }
 
         public override bool OnMouse(MouseButton button, PressType type) {
@@ -31,10 +51,11 @@ namespace AnimalTownGame.Interfaces {
                     var furniture = this.CursorItem as ItemFurniture;
                     if (furniture != null) {
                         var pos = GameImpl.Instance.Camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
-                        if (!MapObject.IsCollidingPos(this.Player.Map, pos, furniture.Type.PlacementBounds)) {
-                            var obj = new Furniture(furniture.Type, this.Player.Map, pos);
+                        if (!MapObject.IsCollidingPos(this.Player.Map, pos, furniture.Type.PlacementBounds[this.PlacementDirection])) {
+                            var obj = new Furniture(furniture.Type, this.Player.Map, pos, this.PlacementDirection);
                             this.Player.Map.AddObject(obj);
                             this.CursorItem = null;
+                            this.PlacementDirection = Direction.Down;
                             return true;
                         }
                     }
@@ -58,8 +79,8 @@ namespace AnimalTownGame.Interfaces {
             var furniture = this.CursorItem as ItemFurniture;
             if (furniture != null) {
                 var pos = camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
-                var color = MapObject.IsCollidingPos(this.Player.Map, pos, furniture.Type.PlacementBounds) ? Color.Red : Color.White;
-                furniture.DrawPreview(batch, pos, new Color(color, 0.25F), true);
+                var color = MapObject.IsCollidingPos(this.Player.Map, pos, furniture.Type.PlacementBounds[this.PlacementDirection]) ? Color.Red : Color.White;
+                furniture.DrawPreview(batch, pos, new Color(color, 0.25F), true, this.PlacementDirection);
             }
         }
 

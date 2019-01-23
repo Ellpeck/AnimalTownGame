@@ -26,6 +26,7 @@ namespace AnimalTownGame.Main {
             if (CurrentInterface != null)
                 CurrentInterface.OnClose();
             CurrentInterface = inter;
+            SetCursorType(CursorType.Default, 1F);
             if (inter != null) {
                 Overlay.OnClose();
                 var view = GameImpl.Instance.GraphicsDevice.Viewport;
@@ -41,6 +42,13 @@ namespace AnimalTownGame.Main {
             Overlay.Update(time);
             if (CurrentInterface != null)
                 CurrentInterface.Update(time);
+        }
+
+        public static void HandleScroll(float scroll) {
+            if (Overlay.OnScroll(scroll))
+                return;
+            if (CurrentInterface != null)
+                CurrentInterface.OnScroll(scroll);
         }
 
         public static bool HandleMouse(MouseButton button, PressType type) {

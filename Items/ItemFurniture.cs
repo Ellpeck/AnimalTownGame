@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AnimalTownGame.Interfaces.Components;
 using AnimalTownGame.Main;
+using AnimalTownGame.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -32,13 +33,9 @@ namespace AnimalTownGame.Items {
                 yield return comp;
         }
 
-        public void DrawPreview(SpriteBatch batch, Vector2 position, Color color, bool offset) {
-            var tex = this.Type.Texture;
-            var bounds = this.Type.RenderBounds;
-            var pos = offset ? position + bounds.Position : position;
-            batch.Draw(tex, pos, null, color, 0F, Vector2.Zero,
-                new Vector2(bounds.Width / tex.Width, bounds.Height / tex.Height),
-                SpriteEffects.None, 0);
+        public void DrawPreview(SpriteBatch batch, Vector2 position, Color color, bool offset, Direction direction) {
+            var pos = offset ? position + this.Type.RenderBounds.Position : position;
+            this.Type.Draw(batch, pos, color, 0, direction);
         }
 
     }
@@ -47,17 +44,22 @@ namespace AnimalTownGame.Items {
 
         public readonly Texture2D Texture;
         public readonly RectangleF RenderBounds;
-        public readonly RectangleF CollisionBounds;
-        public readonly RectangleF PlacementBounds;
+        public readonly Dictionary<Direction, RectangleF> CollisionBounds = new Dictionary<Direction, RectangleF>();
+        public readonly Dictionary<Direction, RectangleF> PlacementBounds = new Dictionary<Direction, RectangleF>();
+        public readonly Dictionary<Direction, RectangleF> HighlightBounds = new Dictionary<Direction, RectangleF>();
         public float DepthOffset;
         public bool IsStorage;
+        public bool Rotates;
 
-        public FurnitureType(string name, RectangleF renderBounds, RectangleF collisionBounds, RectangleF? placementBounds = null)
+        public FurnitureType(string name, RectangleF renderBounds, RectangleF collisionBounds, RectangleF? highlightBounds = null, RectangleF? placementBounds = null)
             : base(name, new Point(0, 0)) {
             this.Texture = GameImpl.LoadContent<Texture2D>("Objects/Furniture/" + name);
             this.RenderBounds = renderBounds;
-            this.CollisionBounds = collisionBounds;
-            this.PlacementBounds = placementBounds ?? collisionBounds;
+            foreach (var dir in Direction.Values) {
+                this.CollisionBounds[dir] = collisionBounds;
+                this.PlacementBounds[dir] = placementBounds ?? collisionBounds;
+                this.HighlightBounds[dir] = highlightBounds ?? renderBounds;
+            }
         }
 
         public FurnitureType SetDepthOffset(float offset) {
@@ -70,8 +72,35 @@ namespace AnimalTownGame.Items {
             return this;
         }
 
+        public FurnitureType Bounds(Direction dir, RectangleF collisionBounds, RectangleF? highlightBounds = null, RectangleF? placementBounds = null) {
+            this.Rotates = true;
+            this.CollisionBounds[dir] = collisionBounds;
+            this.PlacementBounds[dir] = placementBounds ?? collisionBounds;
+            if (highlightBounds.HasValue)
+                this.HighlightBounds[dir] = highlightBounds.Value;
+            return this;
+        }
+
         public override Item Instance() {
             return new ItemFurniture(this);
+        }
+
+        public void Draw(SpriteBatch batch, Vector2 pos, Color color, float depth, Direction direction) {
+            if (!this.Rotates) {
+                batch.Draw(this.Texture,
+                    pos, null, color, 0F, Vector2.Zero,
+                    new Vector2(this.RenderBounds.Width / this.Texture.Width, this.RenderBounds.Height / this.Texture.Height),
+                    SpriteEffects.None, depth);
+            } else {
+                var srcRect = new Rectangle(
+                    direction == Direction.Right || direction == Direction.Up ? this.Texture.Width / 2 : 0,
+                    direction == Direction.Left || direction == Direction.Right ? this.Texture.Height / 2 : 0,
+                    this.Texture.Width / 2, this.Texture.Height / 2);
+                batch.Draw(this.Texture,
+                    pos, srcRect, color, 0F, Vector2.Zero,
+                    new Vector2(this.RenderBounds.Width / (this.Texture.Width / 2), this.RenderBounds.Height / (this.Texture.Height / 2)),
+                    SpriteEffects.None, depth);
+            }
         }
 
     }

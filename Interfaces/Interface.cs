@@ -34,6 +34,13 @@ namespace AnimalTownGame.Interfaces {
             this.Components.Clear();
         }
 
+        public virtual bool OnScroll(float scroll) {
+            for (var i = 0; i < this.Components.Count; i++)
+                if (this.Components[i].OnScroll(scroll))
+                    return true;
+            return false;
+        }
+
         public virtual bool OnMouse(MouseButton button, PressType type) {
             for (var i = 0; i < this.Components.Count; i++)
                 if (this.Components[i].OnMouse(button, type))

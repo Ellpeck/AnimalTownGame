@@ -36,7 +36,6 @@ namespace AnimalTownGame.Objects.Static {
             if (button == MouseButton.Left && this.FruitTimer <= TimeSpan.Zero) {
                 var game = GameImpl.Instance;
                 var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position) <= 1;
-                InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
                 if (closeEnough && type == PressType.Pressed) {
                     foreach (var off in FruitOffsets) {
                         var offset = this.Position + this.RenderBounds.Position + off + new Vector2(0.5F, 0.5F);
@@ -48,7 +47,8 @@ namespace AnimalTownGame.Objects.Static {
 
                     this.FruitTimer = this.Type.Time;
                     return true;
-                }
+                } else
+                    InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
             }
             return false;
         }

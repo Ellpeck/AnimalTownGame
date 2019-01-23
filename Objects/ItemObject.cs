@@ -48,7 +48,6 @@ namespace AnimalTownGame.Objects {
             if (button == MouseButton.Right && this.DestinationY == 0) {
                 var game = GameImpl.Instance;
                 var closeEnough = Vector2.DistanceSquared(game.Player.Position, this.Position) <= 1;
-                InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
                 if (closeEnough && type == PressType.Pressed) {
                     var inv = GameImpl.Instance.Player.Inventory;
                     for (var i = 0; i < inv.Length; i++)
@@ -57,7 +56,8 @@ namespace AnimalTownGame.Objects {
                             this.Map.Objects.Remove(this);
                             return true;
                         }
-                }
+                } else 
+                    InterfaceManager.SetCursorType(CursorType.Pick, closeEnough ? 1F : 0.5F);
             }
             return false;
         }

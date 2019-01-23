@@ -15,6 +15,7 @@ namespace AnimalTownGame.Main {
 
         private static readonly Dictionary<string, Keybind> Keybinds = new Dictionary<string, Keybind>();
         private static readonly PressType[] MousePressTypes = new PressType[2];
+        private static int lastScroll;
 
         static InputManager() {
             AddKeybind(new Keybind("Up", Keys.W));
@@ -92,6 +93,12 @@ namespace AnimalTownGame.Main {
                         }
                     }
                 }
+            }
+
+            var delta = mouse.ScrollWheelValue - lastScroll;
+            if (delta != 0) {
+                InterfaceManager.HandleScroll(delta);
+                lastScroll = mouse.ScrollWheelValue;
             }
 
             var keyboard = Keyboard.GetState();
