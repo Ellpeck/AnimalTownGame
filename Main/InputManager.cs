@@ -26,7 +26,7 @@ namespace AnimalTownGame.Main {
                 if (newType == PressType.Pressed) {
                     if (InterfaceManager.CurrentInterface == null)
                         InterfaceManager.SetInterface(new Inventory(GameImpl.Instance.Player));
-                    else if (InterfaceManager.CurrentInterface is Inventory)
+                    else if (InterfaceManager.CurrentInterface is ItemInterface)
                         InterfaceManager.SetInterface(null);
                     return true;
                 }
@@ -71,7 +71,7 @@ namespace AnimalTownGame.Main {
 
         public static void Update(Map map, Camera camera) {
             var mouse = Mouse.GetState();
-            for (var i = 0; i < 2; i++) {
+            for (var i = 1; i >= 0; i--) {
                 var button = i == 0 ? mouse.LeftButton : mouse.RightButton;
                 if (button == ButtonState.Pressed) {
                     if (MousePressTypes[i] < PressType.Down)

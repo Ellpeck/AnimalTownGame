@@ -37,5 +37,9 @@
             <Key>Shovel</Key>
             <Value>Shovel</Value>
         </Item>
+        <Item>
+            <Key>Drawer</Key>
+            <Value>Drawer</Value>
+        </Item>
     </Asset>
 </XnaContent>

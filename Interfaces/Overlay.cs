@@ -17,7 +17,7 @@ namespace AnimalTownGame.Interfaces {
         private Vector2 timeOffset;
         private Vector2 dateOffset;
 
-        public Overlay() {
+        public Overlay() : base(GameImpl.Instance.Player) {
             var view = GameImpl.Instance.GraphicsDevice.Viewport;
             this.Init(view, new Size2(view.Width, view.Height) / InterfaceManager.Scale);
         }
@@ -30,11 +30,10 @@ namespace AnimalTownGame.Interfaces {
                 } else if (button == MouseButton.Left) {
                     var furniture = this.CursorItem as ItemFurniture;
                     if (furniture != null) {
-                        var game = GameImpl.Instance;
-                        var pos = game.Camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
-                        if (!MapObject.IsCollidingPos(game.CurrentMap, pos, furniture.Type.PlacementBounds)) {
-                            var obj = new Furniture(furniture.Type, game.CurrentMap, pos);
-                            game.CurrentMap.AddObject(obj);
+                        var pos = GameImpl.Instance.Camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
+                        if (!MapObject.IsCollidingPos(this.Player.Map, pos, furniture.Type.PlacementBounds)) {
+                            var obj = new Furniture(furniture.Type, this.Player.Map, pos);
+                            this.Player.Map.AddObject(obj);
                             this.CursorItem = null;
                             return true;
                         }
@@ -58,9 +57,8 @@ namespace AnimalTownGame.Interfaces {
         public void DrawPreviews(SpriteBatch batch, Camera camera) {
             var furniture = this.CursorItem as ItemFurniture;
             if (furniture != null) {
-                var map = GameImpl.Instance.CurrentMap;
                 var pos = camera.ToWorldPos(Mouse.GetState().Position.ToVector2()).Floor() + Vector2.One * 0.5F;
-                var color = MapObject.IsCollidingPos(map, pos, furniture.Type.PlacementBounds) ? Color.Red : Color.White;
+                var color = MapObject.IsCollidingPos(this.Player.Map, pos, furniture.Type.PlacementBounds) ? Color.Red : Color.White;
                 furniture.DrawPreview(batch, pos, new Color(color, 0.25F), true);
             }
         }
@@ -74,7 +72,7 @@ namespace AnimalTownGame.Interfaces {
 
         public override void OnClose() {
             if (this.CursorItem != null) {
-                var inv = GameImpl.Instance.Player.Inventory;
+                var inv = this.Player.Inventory;
                 for (var i = 0; i < inv.Length; i++) {
                     if (inv[i] != null)
                         continue;

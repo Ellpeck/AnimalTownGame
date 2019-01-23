@@ -33,6 +33,7 @@ namespace AnimalTownGame.Main {
         public static readonly ItemType ItemMarbleCounter = new FurnitureType("MarbleCounter", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.5F, -0.5F, 1, 1));
         public static readonly ItemType ItemMarbleCounterSink = new FurnitureType("MarbleCounterSink", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.5F, -0.5F, 1, 1));
         public static readonly ItemType ItemStove = new FurnitureType("Stove", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.5F, -0.5F, 1, 1));
+        public static readonly ItemType ItemDrawer = new FurnitureType("Drawer", new RectangleF(-0.5F, -1.5F, 2, 2), new RectangleF(-0.5F, -0.5F, 2, 1)).SetStorage();
 
     }
 }

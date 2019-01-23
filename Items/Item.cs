@@ -29,10 +29,6 @@ namespace AnimalTownGame.Items {
                 Color.White, 0F, Vector2.Zero, scale, SpriteEffects.None, depth);
         }
 
-        public virtual string GetDisplayName() {
-            return Locale.GetItem(this.Type.Name);
-        }
-
         public virtual IEnumerable<ComponentButton> GetContextMenu(ItemSlot slot, InvContextMenu menu) {
             var game = GameImpl.Instance;
             yield return new ComponentButton(menu,
@@ -68,6 +64,9 @@ namespace AnimalTownGame.Items {
         public virtual Item Instance() {
             return new Item(this);
         }
-
+        
+        public virtual string GetDisplayName() {
+            return Locale.GetItem(this.Name);
+        }
     }
 }

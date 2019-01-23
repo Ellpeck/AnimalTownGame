@@ -10,7 +10,6 @@ namespace AnimalTownGame.Interfaces {
     public class Inventory : ItemInterface {
 
         private static readonly Texture2D Texture = GameImpl.LoadContent<Texture2D>("Interfaces/Inventory");
-        private readonly Player player;
         private Vector2 position;
         private Vector2 invOffset;
         private Vector2 toolsOffset;
@@ -18,8 +17,7 @@ namespace AnimalTownGame.Interfaces {
         private Vector2 toolsTextOffset;
         public InvContextMenu ContextMenu;
 
-        public Inventory(Player player) {
-            this.player = player;
+        public Inventory(Player player) : base(player) {
         }
 
         public override bool OnMouse(MouseButton button, PressType type) {
@@ -58,16 +56,8 @@ namespace AnimalTownGame.Interfaces {
             this.invTextOffset = new Vector2(5, 4);
             this.toolsTextOffset = new Vector2(125, 4);
 
-            for (var y = 0; y < 4; y++)
-                for (var x = 0; x < 6; x++)
-                    this.AddSlot(new ItemSlot(this,
-                        this.position + this.invOffset + new Vector2(x * 16 + (y % 2 == 0 ? 0 : 8), y * 14),
-                        this.player.Inventory, 6 * y + x));
-            for (var y = 0; y < 2; y++)
-                for (var x = 0; x < 2; x++)
-                    this.AddSlot(new ItemSlot(this,
-                        this.position + this.toolsOffset + new Vector2(x * 16 + (y % 2 == 0 ? 0 : 8), y * 14),
-                        this.player.Tools, 2 * y + x, item => item is ItemTool));
+            this.AddSlotGrid(this.position + this.invOffset, 6, 4, this.Player.Inventory);
+            this.AddSlotGrid(this.position + this.toolsOffset, 2, 2, this.Player.Tools);
         }
 
     }

@@ -45,7 +45,7 @@ namespace AnimalTownGame.Interfaces.Components {
             var item = this.Items[this.Index];
             if (item != null && this.Interface.CursorItem == null && this.IsMousedComponent()) {
                 if (this.hoverInfo == null) {
-                    this.hoverInfo = new ComponentHover(this, item.GetDisplayName());
+                    this.hoverInfo = new ComponentHover(this, item.Type.GetDisplayName());
                     this.Interface.AddComponent(this.hoverInfo);
                 }
             } else if (this.hoverInfo != null) {

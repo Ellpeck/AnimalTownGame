@@ -63,6 +63,7 @@
     <Compile Include="Interfaces\Inventory.cs" />
     <Compile Include="Interfaces\ItemInterface.cs" />
     <Compile Include="Interfaces\Overlay.cs" />
+    <Compile Include="Interfaces\Storage.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemFurniture.cs" />
     <Compile Include="Items\ItemTool.cs" />
@@ -109,9 +110,11 @@
     <Content Include="Content\Interfaces\Inventory.png" />
     <Content Include="Content\Interfaces\NormalFont.spritefont" />
     <Content Include="Content\Interfaces\Overlay.png" />
+    <Content Include="Content\Interfaces\Storage.png" />
     <Content Include="Content\Items\Icons.png" />
     <Content Include="Content\Locale\en-US\Interface.xml" />
     <Content Include="Content\Locale\en-US\Items.xml" />
+    <Content Include="Content\Objects\Furniture\Drawer.png" />
     <Content Include="Content\Objects\Furniture\MarbleCounter.png" />
     <Content Include="Content\Objects\Furniture\MarbleCounterSink.png" />
     <Content Include="Content\Objects\Furniture\RedRug.png" />

@@ -50,6 +50,7 @@ namespace AnimalTownGame.Items {
         public readonly RectangleF CollisionBounds;
         public readonly RectangleF PlacementBounds;
         public float DepthOffset;
+        public bool IsStorage;
 
         public FurnitureType(string name, RectangleF renderBounds, RectangleF collisionBounds, RectangleF? placementBounds = null)
             : base(name, new Point(0, 0)) {
@@ -61,6 +62,11 @@ namespace AnimalTownGame.Items {
 
         public FurnitureType SetDepthOffset(float offset) {
             this.DepthOffset = offset;
+            return this;
+        }
+
+        public FurnitureType SetStorage() {
+            this.IsStorage = true;
             return this;
         }
 

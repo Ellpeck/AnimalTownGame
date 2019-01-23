@@ -50,13 +50,12 @@ namespace AnimalTownGame.Main {
         public int Seed;
         public DateTime LastRealTimeUpdate;
         public PlayerInfo Player;
-        public List<MapInfo> Maps;
+        public List<MapInfo> Maps = new List<MapInfo>();
 
         public SaveData(int seed, DateTime lastRealTimeUpdate, Player player, IEnumerable<Map> maps) {
             this.Seed = seed;
             this.LastRealTimeUpdate = lastRealTimeUpdate;
             this.Player = new PlayerInfo(player);
-            this.Maps = new List<MapInfo>();
             foreach (var map in maps)
                 this.Maps.Add(new MapInfo(map));
         }
@@ -97,10 +96,9 @@ namespace AnimalTownGame.Main {
     [Serializable]
     public class ItemListInfo {
 
-        public List<string> Items;
+        public List<string> Items = new List<string>();
 
         public ItemListInfo(params Item[] items) {
-            this.Items = new List<string>();
             foreach (var item in items)
                 this.Items.Add(item == null ? null : item.Type.Name);
         }
@@ -124,11 +122,10 @@ namespace AnimalTownGame.Main {
     public class MapInfo {
 
         public string Name;
-        public List<MapObjectInfo> Objects;
+        public List<MapObjectInfo> Objects= new List<MapObjectInfo>();
 
         public MapInfo(Map map) {
             this.Name = map.Name;
-            this.Objects = new List<MapObjectInfo>();
             foreach (var obj in map.Objects) {
                 var info = Convert(obj);
                 if (info != null)
@@ -183,10 +180,13 @@ namespace AnimalTownGame.Main {
     [Serializable]
     public class FurnitureInfo : MapObjectInfo {
 
+        public ItemListInfo Storage = new ItemListInfo();
         public string Type;
 
         public FurnitureInfo(Furniture furniture) : base(furniture.Position) {
             this.Type = furniture.Type.Name;
+            if (furniture.Type.IsStorage)
+                this.Storage = new ItemListInfo(furniture.Storage);
         }
 
         public FurnitureInfo() {
@@ -194,7 +194,10 @@ namespace AnimalTownGame.Main {
 
         public override MapObject Load(Map map) {
             var type = (FurnitureType) Registry.ItemTypes[this.Type];
-            return new Furniture(type, map, this.Position);
+            var furniture = new Furniture(type, map, this.Position);
+            if (type.IsStorage)
+                this.Storage.Load(furniture.Storage);
+            return furniture;
         }
 
     }
