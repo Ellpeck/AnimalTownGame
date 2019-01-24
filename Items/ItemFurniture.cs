@@ -72,12 +72,14 @@ namespace AnimalTownGame.Items {
             return this;
         }
 
-        public FurnitureType Bounds(Direction dir, RectangleF collisionBounds, RectangleF? highlightBounds = null, RectangleF? placementBounds = null) {
+        public FurnitureType Bounds(RectangleF collisionBounds, RectangleF? highlightBounds, RectangleF? placementBounds, params Direction[] dirs) {
             this.Rotates = true;
-            this.CollisionBounds[dir] = collisionBounds;
-            this.PlacementBounds[dir] = placementBounds ?? collisionBounds;
-            if (highlightBounds.HasValue)
-                this.HighlightBounds[dir] = highlightBounds.Value;
+            foreach (var dir in dirs) {
+                this.CollisionBounds[dir] = collisionBounds;
+                this.PlacementBounds[dir] = placementBounds ?? collisionBounds;
+                if (highlightBounds.HasValue)
+                    this.HighlightBounds[dir] = highlightBounds.Value;
+            }
             return this;
         }
 

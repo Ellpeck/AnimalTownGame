@@ -29,12 +29,12 @@ namespace AnimalTownGame.Main {
         public static readonly ItemType ItemShovel = new ToolType("Shovel", new Point(3, 0));
 
         public static readonly ItemType ItemWhiteLamp = new FurnitureType("WhiteLamp", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.25F, -0.2F, 0.5F, 0.6F));
-        public static readonly ItemType ItemRedRug = new FurnitureType("RedRug", new RectangleF(-1.5F, -0.5F, 3, 2), RectangleF.Empty, null, new RectangleF(-1.5F, -0.5F, 3, 2)).SetDepthOffset(-1F);
+        public static readonly ItemType ItemRedRug = new FurnitureType("RedRug", new RectangleF(-1.5F, -0.5F, 3, 3), RectangleF.Empty, null, new RectangleF(-1.5F, -0.5F, 3, 2)).SetDepthOffset(-1F).Bounds(RectangleF.Empty, null, new RectangleF(-1.5F, -0.5F, 2, 3), Direction.Left, Direction.Right);
         public static readonly ItemType ItemWoodDiningTable = new FurnitureType("WoodDiningTable", new RectangleF(-0.5F, -0.5F, 2, 2), new RectangleF(-0.5F, 0.25F, 2, 1.25F));
         public static readonly ItemType ItemMarbleCounter = new FurnitureType("MarbleCounter", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.5F, -0.5F, 1, 1));
         public static readonly ItemType ItemMarbleCounterSink = new FurnitureType("MarbleCounterSink", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.5F, -0.5F, 1, 1));
         public static readonly ItemType ItemStove = new FurnitureType("Stove", new RectangleF(-0.5F, -1.5F, 1, 2), new RectangleF(-0.5F, -0.5F, 1, 1));
-        public static readonly ItemType ItemDrawer = new FurnitureType("Drawer", new RectangleF(-0.5F, -1.5F, 2, 2), new RectangleF(-0.5F, -0.5F, 2, 1)).SetStorage().Bounds(Direction.Left, new RectangleF(-0.5F, -1F, 0.85F, 1.5F), new RectangleF(-0.5F, -1.5F, 1, 2)).Bounds(Direction.Right, new RectangleF(-0.35F, -1F, 0.85F, 1.5F), new RectangleF(-0.5F, -1.5F, 1, 2));
+        public static readonly ItemType ItemDrawer = new FurnitureType("Drawer", new RectangleF(-0.5F, -1.5F, 2, 2), new RectangleF(-0.5F, -0.5F, 2, 1)).SetStorage().Bounds(new RectangleF(-0.5F, -1F, 0.85F, 1.5F), new RectangleF(-0.5F, -1.5F, 1, 2), null, Direction.Left).Bounds(new RectangleF(-0.35F, -1F, 0.85F, 1.5F), new RectangleF(-0.5F, -1.5F, 1, 2), null, Direction.Right);
 
     }
 }
